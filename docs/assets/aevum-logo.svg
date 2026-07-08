@@ -1,0 +1,78 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="920" height="260" viewBox="0 0 920 260" role="img" aria-labelledby="title desc">
+  <title id="title">Aevum logo</title>
+  <desc id="desc">A deep-time planet engine logo with a layered globe, orbital arc, and wordmark.</desc>
+  <defs>
+    <radialGradient id="planet" cx="38%" cy="28%" r="72%">
+      <stop offset="0%" stop-color="#d7f7d6"/>
+      <stop offset="36%" stop-color="#62b37f"/>
+      <stop offset="62%" stop-color="#2a7f90"/>
+      <stop offset="100%" stop-color="#11283f"/>
+    </radialGradient>
+    <linearGradient id="crust" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0%" stop-color="#f2c56b"/>
+      <stop offset="44%" stop-color="#d7763f"/>
+      <stop offset="72%" stop-color="#7a496d"/>
+      <stop offset="100%" stop-color="#25324d"/>
+    </linearGradient>
+    <linearGradient id="word" x1="0" x2="1" y1="0" y2="0">
+      <stop offset="0%" stop-color="#12263b"/>
+      <stop offset="62%" stop-color="#205a68"/>
+      <stop offset="100%" stop-color="#7a4f62"/>
+    </linearGradient>
+    <clipPath id="globeClip">
+      <circle cx="142" cy="130" r="82"/>
+    </clipPath>
+    <filter id="softShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="8" stdDeviation="8" flood-color="#0a1b2d" flood-opacity="0.18"/>
+    </filter>
+  </defs>
+
+  <rect width="920" height="260" rx="32" fill="#f7faf7"/>
+
+  <g filter="url(#softShadow)">
+    <circle cx="142" cy="130" r="88" fill="#f5fbf5"/>
+    <circle cx="142" cy="130" r="82" fill="url(#planet)"/>
+    <g clip-path="url(#globeClip)">
+      <path d="M58 132 C82 116 98 106 119 112 C141 118 145 96 167 88 C190 78 210 87 228 101 L228 58 L55 58 Z" fill="#204a67" opacity="0.55"/>
+      <path d="M58 158 C83 145 99 146 122 154 C142 161 154 143 175 146 C201 149 215 166 230 185 L230 220 L58 220 Z" fill="#0b253e" opacity="0.42"/>
+      <path d="M72 95 C93 77 123 72 140 82 C152 89 142 105 124 110 C102 116 86 119 72 95 Z" fill="#8fbf6f"/>
+      <path d="M144 121 C161 103 197 104 212 125 C224 143 201 166 178 161 C151 155 130 139 144 121 Z" fill="#c9c46b"/>
+      <path d="M88 158 C109 146 129 158 142 175 C154 191 132 204 108 200 C87 196 73 175 88 158 Z" fill="#4f9b74"/>
+      <path d="M164 68 C180 72 193 82 199 96" fill="none" stroke="#f0d071" stroke-width="6" stroke-linecap="round"/>
+      <path d="M92 125 C116 127 139 129 160 139 C185 151 205 151 226 143" fill="none" stroke="#d8f0d5" stroke-width="3" opacity="0.62"/>
+      <path d="M66 177 C88 169 110 171 131 184 C154 198 178 196 202 187" fill="none" stroke="#bde7e1" stroke-width="3" opacity="0.48"/>
+      <path d="M46 204 C76 199 105 200 136 211 C170 223 202 218 236 207" fill="none" stroke="#f4efe0" stroke-width="3" opacity="0.34"/>
+      <path d="M58 52 L228 208" stroke="url(#crust)" stroke-width="9" opacity="0.82"/>
+    </g>
+    <circle cx="142" cy="130" r="82" fill="none" stroke="#10283e" stroke-width="2" opacity="0.38"/>
+  </g>
+
+  <path d="M38 139 C98 35 215 19 282 92" fill="none" stroke="#385a70" stroke-width="4" stroke-linecap="round" opacity="0.55"/>
+  <path d="M256 85 L281 91 L266 111" fill="none" stroke="#385a70" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" opacity="0.55"/>
+  <g fill="#d9784a">
+    <circle cx="42" cy="134" r="4"/>
+    <circle cx="78" cy="84" r="3"/>
+    <circle cx="122" cy="55" r="3"/>
+    <circle cx="178" cy="52" r="3"/>
+    <circle cx="230" cy="68" r="3"/>
+  </g>
+
+  <g transform="translate(292 70)">
+    <text x="0" y="70" font-family="Inter, Avenir Next, Helvetica, Arial, sans-serif" font-size="78" font-weight="800" letter-spacing="3" fill="url(#word)">AEVUM</text>
+    <text x="5" y="115" font-family="Inter, Avenir Next, Helvetica, Arial, sans-serif" font-size="24" font-weight="600" letter-spacing="1.5" fill="#506070">DEEP-TIME WORLD ENGINE</text>
+    <path d="M6 137 L548 137" stroke="#d7ded9" stroke-width="2"/>
+    <g font-family="Inter, Avenir Next, Helvetica, Arial, sans-serif" font-size="17" fill="#66736f">
+      <text x="6" y="169">planet formation</text>
+      <text x="176" y="169">tectonics</text>
+      <text x="312" y="169">terrain</text>
+      <text x="424" y="169">history archive</text>
+    </g>
+    <g fill="#d9784a">
+      <circle cx="0" cy="137" r="4"/>
+      <circle cx="152" cy="137" r="4"/>
+      <circle cx="286" cy="137" r="4"/>
+      <circle cx="402" cy="137" r="4"/>
+      <circle cx="548" cy="137" r="4"/>
+    </g>
+  </g>
+</svg>

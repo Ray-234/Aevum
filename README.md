@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="docs/assets/aevum-logo.svg" alt="Aevum logo" width="760">
+</p>
+
 # aevum — 行星深时演化引擎 + 世界历史档案 + 策略地图编译器
 
 `aevum`（拉丁语“纪元/世”）不是一个“地图生成器”，而是一个能回答
@@ -19,6 +23,26 @@
 当前决策是：板块/地形生成阶段暂时收官；内置快速气候引擎冻结为诊断原型；
 下一阶段先用真实地球子图与外部气候工具校准，再把月平均气温/降水后处理成
 Köppen 与 biome。
+
+## 结果展示
+
+更多图和来源说明见
+[`docs/RESULT_SHOWCASE.md`](docs/RESULT_SHOWCASE.md)。README 中只保留少量真实输出，
+不提交本地完整 `out*` 实验目录。
+
+![72000-cell elevation snapshot](docs/assets/showcase/elevation_72000_seed707.png)
+
+| 构造/地貌诊断 | 洋底与造山语义 |
+|---|---|
+| ![Terrain diagnostic contact sheet](docs/assets/showcase/terrain_contact_sheet_72000_seed707.png) | ![Orogenic hierarchy overlay](docs/assets/showcase/orogenic_hierarchy_72000_seed707.png) |
+
+| 海底地貌 | 构造对象层 |
+|---|---|
+| ![Bathymetry classes](docs/assets/showcase/bathymetry_72000_seed707.png) | ![Tectonic object layer](docs/assets/showcase/tectonic_objects_earthlike_seed42.png) |
+
+> 气候图暂不作为最终产品展示。仓库中保留的 temperature / precip / biome 图只代表旧的
+> 内置快速气候原型；当前研发路线是先用真实地球子图与外部气候工具校准，再生成
+> Köppen 与 biome。
 
 ---
 
