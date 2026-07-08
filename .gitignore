@@ -1,0 +1,38 @@
+.venv/
+venv/
+env/
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.ipynb_checkpoints/
+build/
+dist/
+
+# Generated experiment outputs. The local workspace contains many GB of
+# diagnostic runs, videos, PNGs, and array snapshots; keep the repository to
+# source, tests, small fixtures, and reproducible plans.
+/out/
+/out_*/
+/out*/
+/out*.json
+*.npz
+*.png
+!docs/**/*.png
+*.mp4
+*.mov
+*.avi
+*.gif
+*.pstats
+
+# External reference datasets are tracked by manifests and fetch notes. Raw
+# downloads include NetCDF/ZIP/LERC files that exceed normal GitHub limits.
+/data/reference/earth_climate/raw/
+/data/reference/earth_climate/cache/
+/data/reference/earth_climate/processed/
+*.tmp
+*.part
+
+.DS_Store

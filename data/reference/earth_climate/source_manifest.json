@@ -1,0 +1,912 @@
+{
+  "schema": "aevum.earth_climate_source_manifest.v1",
+  "manifest_version": "2026-07-05.r0",
+  "raw_data_policy": "Keep large raw Earth datasets out of git.  Store public source metadata, acquisition scripts, checksums, and derived low-resolution fixtures that can be regenerated.",
+  "source_count": 13,
+  "available_local_source_count": 11,
+  "implemented_parser_count": 11,
+  "entries": [
+    {
+      "source_id": "NOAA_ETOPO5_LOCAL",
+      "category": "topography_bathymetry",
+      "title": "NOAA ETOPO5 5-minute global relief grid",
+      "source_url": "https://www.ngdc.noaa.gov/mgg/global/etopo5.HTML",
+      "variables": [
+        "elevation_m",
+        "bathymetry_m"
+      ],
+      "temporal_baseline": "static modern Earth relief",
+      "native_resolution": "5 arc-minute latitude/longitude grid",
+      "local_cache_path": "data/reference/etopo5/ETOPO5.DAT",
+      "requires_account": false,
+      "priority": "available_fallback",
+      "parser_status": "implemented",
+      "derived_targets": [
+        "earth.elevation_m",
+        "earth.land_mask",
+        "earth.hypsometry_metrics"
+      ],
+      "notes": "Already cached in this workspace.  Used as the first executable same-grid Earth topography/bathymetry reference.",
+      "local_cache_abs_path": "/Users/rayw/Projects/aevum/data/reference/etopo5/ETOPO5.DAT",
+      "local_cache_exists": true,
+      "local_cache_bytes": 18662400,
+      "checksum_sha256": "471d3dd534144aa9a6551fe3e76320a06a45dade6fd8d45f7d6ad981d59f93c3",
+      "checksum_status": "computed",
+      "acquisition_status": "available_local_cache"
+    },
+    {
+      "source_id": "NOAA_ETOPO_2022",
+      "category": "topography_bathymetry",
+      "title": "NOAA NCEI ETOPO 2022 Global Relief Model",
+      "source_url": "https://www.ncei.noaa.gov/products/etopo-global-relief-model",
+      "download_urls": [
+        "https://www.ngdc.noaa.gov/thredds/catalog/global/ETOPO2022/60s/60s_bed_elev_netcdf/catalog.html",
+        "https://www.ngdc.noaa.gov/thredds/dodsC/global/ETOPO2022/60s/60s_bed_elev_netcdf/ETOPO_2022_v1_60s_N90W180_bed.nc.ascii?lat[0:30:10799],lon[0:30:21599],z[0:30:10799][0:30:21599]"
+      ],
+      "variables": [
+        "elevation_m",
+        "bathymetry_m"
+      ],
+      "temporal_baseline": "static modern Earth relief",
+      "native_resolution": "15 arc-second source; cached 60 arc-second bedrock relief sampled every 30 cells to 0.5 degree",
+      "local_cache_path": "data/reference/earth_climate/raw/etopo_2022/",
+      "requires_account": false,
+      "priority": "primary_topography_crosscheck",
+      "parser_status": "implemented",
+      "derived_targets": [
+        "earth.etopo2022_elevation_m",
+        "earth.etopo2022_land_mask",
+        "earth.etopo2022_crosscheck_metrics"
+      ],
+      "notes": "Used as a same-grid cross-check against the legacy ETOPO5 baseline. The default pipeline keeps ETOPO5 as earth.elevation_m for backward compatibility and stores ETOPO 2022 under explicit etopo2022 fields.",
+      "local_cache_abs_path": "/Users/rayw/Projects/aevum/data/reference/earth_climate/raw/etopo_2022",
+      "local_cache_exists": true,
+      "local_cache_file_count": 1,
+      "local_cache_bytes": 2865263,
+      "local_cache_files": [
+        {
+          "path": "data/reference/earth_climate/raw/etopo_2022/etopo_2022_v1_60s_bed_0p5deg_opendap.asc",
+          "bytes": 2865263,
+          "sha256": "0ca3a8c79bfd3f781b1f1a180c29d278db0be33ddaffb2e8a7acd12acd896d4e"
+        }
+      ],
+      "checksum_sha256": null,
+      "checksum_status": "file_checksums_computed",
+      "acquisition_status": "available_local_cache"
+    },
+    {
+      "source_id": "WORLDCLIM_2_1",
+      "category": "temperature_precipitation",
+      "title": "WorldClim v2.1 historical monthly climate normals",
+      "source_url": "https://www.worldclim.org/data/worldclim21.html",
+      "variables": [
+        "monthly_temperature_C",
+        "monthly_precipitation_mm"
+      ],
+      "temporal_baseline": "1970-2000 normals",
+      "native_resolution": "30 arc-second to 10 arc-minute global rasters",
+      "local_cache_path": "data/reference/earth_climate/raw/worldclim_2_1/",
+      "download_urls": [
+        "https://geodata.ucdavis.edu/climate/worldclim/2_1/base/wc2.1_10m_tavg.zip",
+        "https://geodata.ucdavis.edu/climate/worldclim/2_1/base/wc2.1_10m_prec.zip"
+      ],
+      "requires_account": false,
+      "priority": "primary_land_climatology",
+      "parser_status": "implemented",
+      "derived_targets": [
+        "earth.monthly_temperature_C",
+        "earth.monthly_precip_mm",
+        "earth.seasonal_temperature_C",
+        "earth.seasonal_precip_mm_yr_equiv"
+      ],
+      "notes": "Land climatology anchor for seasonal temperature and precipitation.",
+      "local_cache_abs_path": "/Users/rayw/Projects/aevum/data/reference/earth_climate/raw/worldclim_2_1",
+      "local_cache_exists": true,
+      "local_cache_file_count": 2,
+      "local_cache_bytes": 44623195,
+      "local_cache_files": [
+        {
+          "path": "data/reference/earth_climate/raw/worldclim_2_1/wc2.1_10m_prec.zip",
+          "bytes": 7258539,
+          "sha256": "1090f578f6402672a2b6438e252156f6cf867a25002a8ad6ffcbfa19e516ddc6"
+        },
+        {
+          "path": "data/reference/earth_climate/raw/worldclim_2_1/wc2.1_10m_tavg.zip",
+          "bytes": 37364656,
+          "sha256": "5e567dcfe94379b94229492849ce91078b1c6e5210aaf435fba449fae6b95405"
+        }
+      ],
+      "checksum_sha256": null,
+      "checksum_status": "file_checksums_computed",
+      "acquisition_status": "available_local_cache"
+    },
+    {
+      "source_id": "KOTTEK_RUBEL_KOPPEN_2006_ASCII",
+      "category": "climate_class",
+      "title": "World map of the Koppen-Geiger climate classification updated",
+      "source_url": "https://koeppen-geiger.vu-wien.ac.at/present.htm",
+      "download_urls": [
+        "https://koeppen-geiger.vu-wien.ac.at/data/Koeppen-Geiger-ASCII.zip"
+      ],
+      "variables": [
+        "koppen_geiger_class"
+      ],
+      "temporal_baseline": "1951-2000",
+      "native_resolution": "0.5 degree ASCII grid",
+      "local_cache_path": "data/reference/earth_climate/raw/koppen_geiger/Koeppen-Geiger-ASCII.zip",
+      "requires_account": false,
+      "priority": "available_climate_class_reference",
+      "parser_status": "implemented",
+      "derived_targets": [
+        "earth.koppen_class",
+        "earth.koppen_major_class",
+        "earth.biome_class_proxy"
+      ],
+      "notes": "Used as a lightweight executable climate-class reference.  GloH2O V3 remains the planned high-resolution follow-up.",
+      "local_cache_abs_path": "/Users/rayw/Projects/aevum/data/reference/earth_climate/raw/koppen_geiger/Koeppen-Geiger-ASCII.zip",
+      "local_cache_exists": true,
+      "local_cache_bytes": 250154,
+      "checksum_sha256": "4b85ca339b9aba4c6507ed0db9efad99334d56bd7010f417672a0c977b4b2f75",
+      "checksum_status": "computed",
+      "acquisition_status": "available_local_cache"
+    },
+    {
+      "source_id": "NOAA_PSL_NCEP_NCAR_REANALYSIS_1",
+      "category": "wind_pressure_reanalysis",
+      "title": "NOAA PSL NCEP/NCAR Reanalysis 1",
+      "source_url": "https://psl.noaa.gov/data/gridded/data.ncep.reanalysis.html",
+      "download_urls": [
+        "https://downloads.psl.noaa.gov/Datasets/ncep.reanalysis.derived/surface_gauss/uwnd.10m.mon.mean.nc",
+        "https://downloads.psl.noaa.gov/Datasets/ncep.reanalysis.derived/surface_gauss/vwnd.10m.mon.mean.nc",
+        "https://downloads.psl.noaa.gov/Datasets/ncep.reanalysis.derived/surface/slp.mon.mean.nc"
+      ],
+      "variables": [
+        "u10",
+        "v10",
+        "surface_pressure",
+        "air_temperature"
+      ],
+      "temporal_baseline": "1948-present monthly means",
+      "native_resolution": "2.5 degree global grids",
+      "local_cache_path": "data/reference/earth_climate/raw/noaa_psl_ncep/",
+      "requires_account": false,
+      "priority": "fallback_global_reanalysis",
+      "parser_status": "implemented",
+      "derived_targets": [
+        "earth.wind_u10_v10",
+        "earth.seasonal_pressure_proxy"
+      ],
+      "notes": "No-account fallback for wind and pressure calibration.",
+      "local_cache_abs_path": "/Users/rayw/Projects/aevum/data/reference/earth_climate/raw/noaa_psl_ncep",
+      "local_cache_exists": true,
+      "local_cache_file_count": 3,
+      "local_cache_bytes": 128224017,
+      "local_cache_files": [
+        {
+          "path": "data/reference/earth_climate/raw/noaa_psl_ncep/slp.mon.mean.nc",
+          "bytes": 21519805,
+          "sha256": "27bb132ffcab71edeb7fe2eaef2219737379c6b5a51bb74b5cc0b308416a27c9"
+        },
+        {
+          "path": "data/reference/earth_climate/raw/noaa_psl_ncep/uwnd.10m.mon.mean.nc",
+          "bytes": 53352944,
+          "sha256": "67b5502bc172e3e5d2d24917e073a9ad5e7643fdd8a6bc2a76bd2473d27420dc"
+        },
+        {
+          "path": "data/reference/earth_climate/raw/noaa_psl_ncep/vwnd.10m.mon.mean.nc",
+          "bytes": 53351268,
+          "sha256": "eaf843a722ab5d72ec68e80f065492cabec926c2a58f54ff7994b2673857272b"
+        }
+      ],
+      "checksum_sha256": null,
+      "checksum_status": "file_checksums_computed",
+      "acquisition_status": "available_local_cache"
+    },
+    {
+      "source_id": "ERA5_MONTHLY_SINGLE_LEVELS",
+      "category": "wind_pressure_reanalysis",
+      "title": "ERA5 monthly averaged single levels",
+      "source_url": "https://cds.climate.copernicus.eu/datasets/reanalysis-era5-single-levels-monthly-means",
+      "variables": [
+        "u10",
+        "v10",
+        "msl",
+        "t2m",
+        "tp"
+      ],
+      "temporal_baseline": "1940-present monthly means",
+      "native_resolution": "global reanalysis grid, user-selected download resolution",
+      "local_cache_path": "data/reference/earth_climate/raw/era5/",
+      "requires_account": false,
+      "priority": "optional_high_quality_reanalysis",
+      "parser_status": "planned_optional",
+      "derived_targets": [
+        "earth.wind_u10_v10",
+        "earth.monthly_temperature_C",
+        "earth.monthly_precip_mm"
+      ],
+      "notes": "High-quality reference, but should not block no-account calibration.",
+      "local_cache_abs_path": "/Users/rayw/Projects/aevum/data/reference/earth_climate/raw/era5",
+      "local_cache_exists": false,
+      "local_cache_bytes": 0,
+      "checksum_sha256": null,
+      "checksum_status": "pending_until_acquisition",
+      "acquisition_status": "not_downloaded"
+    },
+    {
+      "source_id": "NOAA_OISST_V2_LTM_1991_2020",
+      "category": "sea_surface_temperature",
+      "title": "NOAA Optimum Interpolation SST v2 monthly long-term means",
+      "source_url": "https://psl.noaa.gov/data/gridded/data.noaa.oisst.v2.html",
+      "download_urls": [
+        "https://downloads.psl.noaa.gov/Datasets/noaa.oisst.v2/sst.ltm.1991-2020.nc",
+        "https://downloads.psl.noaa.gov/Datasets/noaa.oisst.v2/icec.ltm.1991-2020.nc"
+      ],
+      "variables": [
+        "monthly_sst_C",
+        "monthly_sea_ice_concentration_pct"
+      ],
+      "temporal_baseline": "1991-2020 monthly long-term mean",
+      "native_resolution": "1 degree latitude/longitude grid",
+      "local_cache_path": "data/reference/earth_climate/raw/noaa_oisst_v2/",
+      "requires_account": false,
+      "priority": "primary_sst_reference",
+      "parser_status": "implemented",
+      "derived_targets": [
+        "earth.monthly_sst_C",
+        "earth.seasonal_sst_C",
+        "earth.annual_sst_C",
+        "earth.monthly_sea_ice_concentration_pct"
+      ],
+      "notes": "Small no-account SST/sea-ice climatology used to calibrate ocean thermal gradients before full coupled SST dynamics.",
+      "local_cache_abs_path": "/Users/rayw/Projects/aevum/data/reference/earth_climate/raw/noaa_oisst_v2",
+      "local_cache_exists": true,
+      "local_cache_file_count": 2,
+      "local_cache_bytes": 5468189,
+      "local_cache_files": [
+        {
+          "path": "data/reference/earth_climate/raw/noaa_oisst_v2/icec.ltm.1991-2020.nc",
+          "bytes": 2026353,
+          "sha256": "5d419580109d86e941e776c01af8e8c7b8fe4de1d2fc7fc02c5f26bfb8b55e93"
+        },
+        {
+          "path": "data/reference/earth_climate/raw/noaa_oisst_v2/sst.ltm.1991-2020.nc",
+          "bytes": 3441836,
+          "sha256": "16f54e4717a949a8e8ddd143cadfed308a1cc0ea4a2be43c522d899543932b34"
+        }
+      ],
+      "checksum_sha256": null,
+      "checksum_status": "file_checksums_computed",
+      "acquisition_status": "available_local_cache"
+    },
+    {
+      "source_id": "NOAA_AOML_DRIFTER_CURRENT_CLIMATOLOGY_V3",
+      "category": "surface_ocean_currents",
+      "title": "NOAA/AOML annual near-surface drifter velocity climatology v3",
+      "source_url": "https://www.aoml.noaa.gov/phod/gdp/mean_velocity.php",
+      "download_urls": [
+        "https://www.arcgis.com/home/item.html?id=3f453a562771441f9d42a2f03c9b6111"
+      ],
+      "variables": [
+        "annual_current_speed_m_s",
+        "annual_current_direction_deg"
+      ],
+      "temporal_baseline": "2005-2023 annual climatology",
+      "native_resolution": "0.25 degree ArcGIS LERC raster tiles",
+      "local_cache_path": "data/reference/earth_climate/raw/noaa_aoml_drifter_current_v3/",
+      "requires_account": false,
+      "priority": "primary_no_account_current_reference",
+      "parser_status": "implemented",
+      "derived_targets": [
+        "earth.surface_current_u_v",
+        "earth.annual_surface_current_speed_m_s",
+        "earth.annual_surface_current_direction_deg"
+      ],
+      "notes": "Public numerical LERC tile service.  Provides annual observed near-surface current magnitude/direction; OSCAR monthly currents remain the higher-cost optional follow-up.",
+      "local_cache_abs_path": "/Users/rayw/Projects/aevum/data/reference/earth_climate/raw/noaa_aoml_drifter_current_v3",
+      "local_cache_exists": true,
+      "local_cache_file_count": 18,
+      "local_cache_bytes": 1310124,
+      "local_cache_files": [
+        {
+          "path": "data/reference/earth_climate/raw/noaa_aoml_drifter_current_v3/level2/r00_c00.lerc",
+          "bytes": 91514,
+          "sha256": "b9ae0d0cdfaa6533c6698d6af7ad5b5d4bc900e85ae7fe5432cf7484020e0f56"
+        },
+        {
+          "path": "data/reference/earth_climate/raw/noaa_aoml_drifter_current_v3/level2/r00_c01.lerc",
+          "bytes": 42618,
+          "sha256": "0f1924f54fc90791d96b830ae998283bd17db11681b4a3d71a4bb91e3dfa0d15"
+        },
+        {
+          "path": "data/reference/earth_climate/raw/noaa_aoml_drifter_current_v3/level2/r00_c02.lerc",
+          "bytes": 102788,
+          "sha256": "400ddc6498194640cda8d48691529d289cc86baf19ffc1d15c3caa2283ee5d82"
+        },
+        {
+          "path": "data/reference/earth_climate/raw/noaa_aoml_drifter_current_v3/level2/r00_c03.lerc",
+          "bytes": 23884,
+          "sha256": "96cc44d7564013c4758765ff7552752f190ca8172d4ec62cec4206b6795e1738"
+        },
+        {
+          "path": "data/reference/earth_climate/raw/noaa_aoml_drifter_current_v3/level2/r00_c04.lerc",
+          "bytes": 15799,
+          "sha256": "e061cbba94321e4d6d2811859853f2d91973af637ace8981450d9c00feecc30e"
+        },
+        {
+          "path": "data/reference/earth_climate/raw/noaa_aoml_drifter_current_v3/level2/r00_c05.lerc",
+          "bytes": 58016,
+          "sha256": "eb880255e381d4e8e95e7e45468de500b52154d13a77865c81cadee2524554ab"
+        },
+        {
+          "path": "data/reference/earth_climate/raw/noaa_aoml_drifter_current_v3/level2/r01_c00.lerc",
+          "bytes": 149105,
+          "sha256": "98bd3f4a2cdfbcd793eff21579bc0873777eb9f2b17051ac03f9739b0cfdf867"
+        },
+        {
+          "path": "data/reference/earth_climate/raw/noaa_aoml_drifter_current_v3/level2/r01_c01.lerc",
+          "bytes": 110578,
+          "sha256": "ad3f4d8e162bbdf9c4ccee2081351389a44cfb755fa8ab52550d3e2c63ef0d7c"
+        },
+        {
+          "path": "data/reference/earth_climate/raw/noaa_aoml_drifter_current_v3/level2/r01_c02.lerc",
+          "bytes": 129069,
+          "sha256": "57c1eae60c8031cf4c7a4b66deef8bb3cfdf6f76e802300070b0a3131a73a043"
+        },
+        {
+          "path": "data/reference/earth_climate/raw/noaa_aoml_drifter_current_v3/level2/r01_c03.lerc",
+          "bytes": 100161,
+          "sha256": "7d02d78785ea5ea60a282067355078b277d547e76fd8db0e6478cd05cbe1be11"
+        },
+        {
+          "path": "data/reference/earth_climate/raw/noaa_aoml_drifter_current_v3/level2/r01_c04.lerc",
+          "bytes": 118549,
+          "sha256": "84ceeedf9df95e79d92e0983aa61116ec4800c1abab94f84159dc5dd08ca8591"
+        },
+        {
+          "path": "data/reference/earth_climate/raw/noaa_aoml_drifter_current_v3/level2/r01_c05.lerc",
+          "bytes": 88750,
+          "sha256": "0910b7f999a3136093092f704e9aa3b394556e53449256cf2bb25dd394a02d28"
+        },
+        {
+          "path": "data/reference/earth_climate/raw/noaa_aoml_drifter_current_v3/level2/r02_c00.lerc",
+          "bytes": 54503,
+          "sha256": "c3f7477f81f202ce038fac27b30da950b62bea9de10632798bc3c2449f968a49"
+        },
+        {
+          "path": "data/reference/earth_climate/raw/noaa_aoml_drifter_current_v3/level2/r02_c01.lerc",
+          "bytes": 51141,
+          "sha256": "2c21e7111c2331fde8c43577ff00016c91ec8d9298aa2a10c830df2c7ec04d38"
+        },
+        {
+          "path": "data/reference/earth_climate/raw/noaa_aoml_drifter_current_v3/level2/r02_c02.lerc",
+          "bytes": 49713,
+          "sha256": "78a4500f15983dc4786b15e673832f41b1a1edf017ffad9b734b2998be4f8ebf"
+        },
+        {
+          "path": "data/reference/earth_climate/raw/noaa_aoml_drifter_current_v3/level2/r02_c03.lerc",
+          "bytes": 39889,
+          "sha256": "67bd79167c543c63a8052bc8829656d95e3069b61ca9c6eece92c219340b72d5"
+        },
+        {
+          "path": "data/reference/earth_climate/raw/noaa_aoml_drifter_current_v3/level2/r02_c04.lerc",
+          "bytes": 49125,
+          "sha256": "0c8f2b7b69cc9558ddba6f72898aee5e7d3cb7850c87ad3fddb35caade9bec5c"
+        },
+        {
+          "path": "data/reference/earth_climate/raw/noaa_aoml_drifter_current_v3/level2/r02_c05.lerc",
+          "bytes": 34922,
+          "sha256": "2db6bea9a3cb99e36e63799905bd9c20d3e55396cc0ae353165b5143430019ad"
+        }
+      ],
+      "checksum_sha256": null,
+      "checksum_status": "file_checksums_computed",
+      "acquisition_status": "available_local_cache"
+    },
+    {
+      "source_id": "NASA_JPL_OSCAR",
+      "category": "surface_ocean_currents",
+      "title": "NASA/JPL PO.DAAC OSCAR surface currents monthly means",
+      "source_url": "https://podaac.jpl.nasa.gov/dataset/OSCAR_L4_OC_FINAL_V2.0",
+      "download_urls": [
+        "https://www.arcgis.com/home/item.html?id=b02f417ebbed4dc69edefd848dc69715",
+        "https://tiledimageservices.arcgis.com/P3ePLMYs2RVChkJx/arcgis/rest/services/OSCAR_2001_to_2020_20yr_Monthly_Mean/ImageServer",
+        "https://archive.podaac.earthdata.nasa.gov/podaac-ops-cumulus-docs/oscar/open/L4/oscar_v2.0/docs/oscarv2guide.pdf"
+      ],
+      "variables": [
+        "monthly_surface_current_u",
+        "monthly_surface_current_v",
+        "seasonal_surface_current_u",
+        "seasonal_surface_current_v",
+        "annual_surface_current_u",
+        "annual_surface_current_v"
+      ],
+      "temporal_baseline": "2001-2020 monthly means sampled as a monthly climatology",
+      "native_resolution": "ArcGIS LERC2D Vector-UV cache; source OSCAR v2.0 0.25 degree, default sampled at level 1 for global calibration",
+      "local_cache_path": "data/reference/earth_climate/raw/oscar/monthly_mean_2001_2020_arcgis/",
+      "requires_account": false,
+      "priority": "primary_current_reference",
+      "parser_status": "implemented",
+      "derived_targets": [
+        "earth.monthly_surface_current_u_v",
+        "earth.seasonal_surface_current_u_v",
+        "earth.annual_surface_current_u_v",
+        "earth.monthly_surface_current_speed_m_s",
+        "earth.seasonal_surface_current_speed_m_s",
+        "earth.annual_surface_current_speed_m_s"
+      ],
+      "notes": "Public ArcGIS tiled imagery layer derived from OSCAR and credited to NASA PO.DAAC.  Cache construction is explicit because a full 2001-2020 monthly climatology requires many LERC tile reads.",
+      "local_cache_abs_path": "/Users/rayw/Projects/aevum/data/reference/earth_climate/raw/oscar/monthly_mean_2001_2020_arcgis",
+      "local_cache_exists": true,
+      "local_cache_file_count": 1442,
+      "local_cache_bytes": 115230190,
+      "local_cache_files": [
+        {
+          "path": "data/reference/earth_climate/raw/oscar/monthly_mean_2001_2020_arcgis/multidimensional_info.json",
+          "bytes": 7781,
+          "sha256": "fba0a40fb886d1b73fc136495c5f391ff5ecfa2ead62959f127a0293e9cfc656"
+        },
+        {
+          "path": "data/reference/earth_climate/raw/oscar/monthly_mean_2001_2020_arcgis/oscar_2001_2020_monthly_climatology_level1.npz",
+          "bytes": 5628114,
+          "sha256": "e2e1da1a91a85df011e1a7452d919f026045a802f2741957aaef20e4fb7c1932"
+        },
+        {
+          "path": "data/reference/earth_climate/raw/oscar/monthly_mean_2001_2020_arcgis/tiles/level1/slice000/r00_c00.lerc",
+          "bytes": 113646,
+          "sha256": "0f009d803bb2d0fa85bdfc05b71770f02f47d2b8b131a88871bd8bd73501aebb"
+        },
+        {
+          "path": "data/reference/earth_climate/raw/oscar/monthly_mean_2001_2020_arcgis/tiles/level1/slice000/r00_c01.lerc",
+          "bytes": 25586,
+          "sha256": "45ec6e37d1cdb82c6d5cee64993c176cf5087b3bd8e512401bec9107b1a84318"
+        },
+        {
+          "path": "data/reference/earth_climate/raw/oscar/monthly_mean_2001_2020_arcgis/tiles/level1/slice000/r01_c00.lerc",
+          "bytes": 221716,
+          "sha256": "4322e7e34d37984f6ae573ffa94589f1b6d496b335ceb8641ecdefbbf8fb96e9"
+        },
+        {
+          "path": "data/reference/earth_climate/raw/oscar/monthly_mean_2001_2020_arcgis/tiles/level1/slice000/r01_c01.lerc",
+          "bytes": 84197,
+          "sha256": "fa4f8af257677af1ba6861401b2e3864e216b6ac92451d1df33845e1bc896f26"
+        },
+        {
+          "path": "data/reference/earth_climate/raw/oscar/monthly_mean_2001_2020_arcgis/tiles/level1/slice000/r02_c00.lerc",
+          "bytes": 188,
+          "sha256": "9577dea0cb6c08c5a963dfc804febe118b56356226ef23233a5ee5a5f36aa8d8"
+        },
+        {
+          "path": "data/reference/earth_climate/raw/oscar/monthly_mean_2001_2020_arcgis/tiles/level1/slice000/r02_c01.lerc",
+          "bytes": 188,
+          "sha256": "9577dea0cb6c08c5a963dfc804febe118b56356226ef23233a5ee5a5f36aa8d8"
+        },
+        {
+          "path": "data/reference/earth_climate/raw/oscar/monthly_mean_2001_2020_arcgis/tiles/level1/slice001/r00_c00.lerc",
+          "bytes": 105608,
+          "sha256": "1edb88a7c6c70a89ef9d9a865ad1f169c9486b4296661e16f2f27f4b684804f2"
+        },
+        {
+          "path": "data/reference/earth_climate/raw/oscar/monthly_mean_2001_2020_arcgis/tiles/level1/slice001/r00_c01.lerc",
+          "bytes": 23136,
+          "sha256": "69c52e296307851b39eb5f8b9e5b0e8fa79b868818968531beca7df6e4a25bdb"
+        },
+        {
+          "path": "data/reference/earth_climate/raw/oscar/monthly_mean_2001_2020_arcgis/tiles/level1/slice001/r01_c00.lerc",
+          "bytes": 225196,
+          "sha256": "f21942ff8bc1c713a543143a90eba1c7f456b7991c57af5f6505053f096c86e1"
+        },
+        {
+          "path": "data/reference/earth_climate/raw/oscar/monthly_mean_2001_2020_arcgis/tiles/level1/slice001/r01_c01.lerc",
+          "bytes": 84262,
+          "sha256": "1b58cea78258ef11cabfa3fc3d2e55a88817c499f7e8ba0004fb718088b9df0b"
+        },
+        {
+          "path": "data/reference/earth_climate/raw/oscar/monthly_mean_2001_2020_arcgis/tiles/level1/slice001/r02_c00.lerc",
+          "bytes": 188,
+          "sha256": "9577dea0cb6c08c5a963dfc804febe118b56356226ef23233a5ee5a5f36aa8d8"
+        },
+        {
+          "path": "data/reference/earth_climate/raw/oscar/monthly_mean_2001_2020_arcgis/tiles/level1/slice001/r02_c01.lerc",
+          "bytes": 188,
+          "sha256": "9577dea0cb6c08c5a963dfc804febe118b56356226ef23233a5ee5a5f36aa8d8"
+        },
+        {
+          "path": "data/reference/earth_climate/raw/oscar/monthly_mean_2001_2020_arcgis/tiles/level1/slice002/r00_c00.lerc",
+          "bytes": 103819,
+          "sha256": "f25291e554de60d85df7835d93674b684c2428a01334b1d930f19bd0be1866cf"
+        },
+        {
+          "path": "data/reference/earth_climate/raw/oscar/monthly_mean_2001_2020_arcgis/tiles/level1/slice002/r00_c01.lerc",
+          "bytes": 23645,
+          "sha256": "d70bb689cc033525b82293f8fb391ae5488c29f8b5ae82181c8b790d405e0010"
+        },
+        {
+          "path": "data/reference/earth_climate/raw/oscar/monthly_mean_2001_2020_arcgis/tiles/level1/slice002/r01_c00.lerc",
+          "bytes": 223103,
+          "sha256": "56871b6e4a51846e5224c9b17d30af84ca6392caac2470594fd054394b511f72"
+        },
+        {
+          "path": "data/reference/earth_climate/raw/oscar/monthly_mean_2001_2020_arcgis/tiles/level1/slice002/r01_c01.lerc",
+          "bytes": 84181,
+          "sha256": "16c6ac27387b5de9745575f89acd749bcb0bfeacdd15e4d48cfea87c57b60eb7"
+        },
+        {
+          "path": "data/reference/earth_climate/raw/oscar/monthly_mean_2001_2020_arcgis/tiles/level1/slice002/r02_c00.lerc",
+          "bytes": 188,
+          "sha256": "9577dea0cb6c08c5a963dfc804febe118b56356226ef23233a5ee5a5f36aa8d8"
+        },
+        {
+          "path": "data/reference/earth_climate/raw/oscar/monthly_mean_2001_2020_arcgis/tiles/level1/slice002/r02_c01.lerc",
+          "bytes": 188,
+          "sha256": "9577dea0cb6c08c5a963dfc804febe118b56356226ef23233a5ee5a5f36aa8d8"
+        },
+        {
+          "path": "data/reference/earth_climate/raw/oscar/monthly_mean_2001_2020_arcgis/tiles/level1/slice003/r00_c00.lerc",
+          "bytes": 103907,
+          "sha256": "505cfedf6b06bf2cd627317a00b7acb497b5a533d4071e4a79281d6128c20ab2"
+        },
+        {
+          "path": "data/reference/earth_climate/raw/oscar/monthly_mean_2001_2020_arcgis/tiles/level1/slice003/r00_c01.lerc",
+          "bytes": 24089,
+          "sha256": "c25c45200ed94763d0fc32a69f6d462bee3270b2b912e32da529f56a676af4e3"
+        },
+        {
+          "path": "data/reference/earth_climate/raw/oscar/monthly_mean_2001_2020_arcgis/tiles/level1/slice003/r01_c00.lerc",
+          "bytes": 212953,
+          "sha256": "c1b462f810fb6bf2e50adc17365d2877f2aa1038e6ca96720356fc2c8cdebe97"
+        },
+        {
+          "path": "data/reference/earth_climate/raw/oscar/monthly_mean_2001_2020_arcgis/tiles/level1/slice003/r01_c01.lerc",
+          "bytes": 81441,
+          "sha256": "c3bb459f90d36e7d4ad74ff5872195c40f9c2be8697f120a3792589c4a565c41"
+        },
+        {
+          "path": "data/reference/earth_climate/raw/oscar/monthly_mean_2001_2020_arcgis/tiles/level1/slice003/r02_c00.lerc",
+          "bytes": 188,
+          "sha256": "9577dea0cb6c08c5a963dfc804febe118b56356226ef23233a5ee5a5f36aa8d8"
+        },
+        {
+          "path": "data/reference/earth_climate/raw/oscar/monthly_mean_2001_2020_arcgis/tiles/level1/slice003/r02_c01.lerc",
+          "bytes": 188,
+          "sha256": "9577dea0cb6c08c5a963dfc804febe118b56356226ef23233a5ee5a5f36aa8d8"
+        },
+        {
+          "path": "data/reference/earth_climate/raw/oscar/monthly_mean_2001_2020_arcgis/tiles/level1/slice004/r00_c00.lerc",
+          "bytes": 118766,
+          "sha256": "4ebdc8c11e97d9291d56f189525b771e67adabbe14cb324dce119836af07caa1"
+        },
+        {
+          "path": "data/reference/earth_climate/raw/oscar/monthly_mean_2001_2020_arcgis/tiles/level1/slice004/r00_c01.lerc",
+          "bytes": 25488,
+          "sha256": "b597ef8e0eef3a79e06cc3558747d7a0c3f5b2d06b6d251ae9337a5115286107"
+        },
+        {
+          "path": "data/reference/earth_climate/raw/oscar/monthly_mean_2001_2020_arcgis/tiles/level1/slice004/r01_c00.lerc",
+          "bytes": 207759,
+          "sha256": "3131f183607f289e554b5f00ed9ae7433bbd1d6aa5635920a99dc29f04ebcac3"
+        },
+        {
+          "path": "data/reference/earth_climate/raw/oscar/monthly_mean_2001_2020_arcgis/tiles/level1/slice004/r01_c01.lerc",
+          "bytes": 80172,
+          "sha256": "57ff2b077521a3d532f7be2f0fb49a9a2ce9e0b0da19081da2e6dd9f62064c2f"
+        },
+        {
+          "path": "data/reference/earth_climate/raw/oscar/monthly_mean_2001_2020_arcgis/tiles/level1/slice004/r02_c00.lerc",
+          "bytes": 188,
+          "sha256": "9577dea0cb6c08c5a963dfc804febe118b56356226ef23233a5ee5a5f36aa8d8"
+        },
+        {
+          "path": "data/reference/earth_climate/raw/oscar/monthly_mean_2001_2020_arcgis/tiles/level1/slice004/r02_c01.lerc",
+          "bytes": 188,
+          "sha256": "9577dea0cb6c08c5a963dfc804febe118b56356226ef23233a5ee5a5f36aa8d8"
+        }
+      ],
+      "checksum_sha256": null,
+      "checksum_status": "partial_file_checksums_computed",
+      "acquisition_status": "available_local_cache"
+    },
+    {
+      "source_id": "GLOH2O_KOPPEN_GEIGER",
+      "category": "climate_class",
+      "title": "Beck et al. / GloH2O Koppen-Geiger climate maps",
+      "source_url": "https://www.gloh2o.org/koppen/",
+      "download_urls": [
+        "https://ndownloader.figshare.com/files/42602809"
+      ],
+      "variables": [
+        "koppen_geiger_class"
+      ],
+      "temporal_baseline": "1991-2020 historical classification",
+      "native_resolution": "0.01, 0.1, 0.5, and 1.0 degree GeoTIFF rasters",
+      "local_cache_path": "data/reference/earth_climate/raw/koppen_geiger/",
+      "requires_account": false,
+      "priority": "primary_climate_class_reference",
+      "parser_status": "implemented",
+      "derived_targets": [
+        "earth.koppen_class",
+        "earth.koppen_major_class",
+        "earth.biome_class_proxy"
+      ],
+      "notes": "Primary executable Koppen source.  The adapter samples the 1991-2020 0.1 degree GeoTIFF by default and falls back to the older ASCII product only when this cache is unavailable.",
+      "local_cache_abs_path": "/Users/rayw/Projects/aevum/data/reference/earth_climate/raw/koppen_geiger",
+      "local_cache_exists": true,
+      "local_cache_file_count": 2,
+      "local_cache_bytes": 92471525,
+      "local_cache_files": [
+        {
+          "path": "data/reference/earth_climate/raw/koppen_geiger/Koeppen-Geiger-ASCII.zip",
+          "bytes": 250154,
+          "sha256": "4b85ca339b9aba4c6507ed0db9efad99334d56bd7010f417672a0c977b4b2f75"
+        },
+        {
+          "path": "data/reference/earth_climate/raw/koppen_geiger/gloh2o/koppen_geiger_tif.zip",
+          "bytes": 92221371,
+          "sha256": "0f43cd0c83a781e29c0e9c43e114f690bb84274bfc78b3dc2c879888b0f60df1"
+        }
+      ],
+      "checksum_sha256": null,
+      "checksum_status": "file_checksums_computed",
+      "acquisition_status": "available_local_cache"
+    },
+    {
+      "source_id": "ESA_CCI_LAND_COVER",
+      "category": "biome_land_cover",
+      "title": "ESA CCI / C3S global land cover via Planetary Computer",
+      "source_url": "https://planetarycomputer.microsoft.com/dataset/esa-cci-lc",
+      "download_urls": [
+        "https://planetarycomputer.microsoft.com/api/stac/v1/collections/esa-cci-lc",
+        "https://planetarycomputer.microsoft.com/api/stac/v1/collections/esa-cci-lc/items?limit=100",
+        "https://doi.org/10.24381/cds.006f2c9a"
+      ],
+      "variables": [
+        "lccs_class",
+        "broad_land_cover_class"
+      ],
+      "temporal_baseline": "2020 annual ESA CCI/C3S land cover",
+      "native_resolution": "source 300 m COG tiles; cached 1024x1024 categorical rendered preview per 45 degree tile for coarse calibration",
+      "local_cache_path": "data/reference/earth_climate/raw/esa_cci_land_cover/planetary_computer_preview_2020/",
+      "requires_account": false,
+      "priority": "primary_land_cover_reference",
+      "parser_status": "implemented",
+      "derived_targets": [
+        "earth.esa_cci_lccs_class",
+        "earth.esa_cci_land_cover_broad_class",
+        "earth.land_cover_crosscheck_metrics"
+      ],
+      "notes": "Uses Planetary Computer STAC metadata and rendered categorical previews to avoid downloading full 300 m global COGs.  Suitable for coarse biome/land-cover envelope checks, not fine land-use analysis.",
+      "local_cache_abs_path": "/Users/rayw/Projects/aevum/data/reference/earth_climate/raw/esa_cci_land_cover/planetary_computer_preview_2020",
+      "local_cache_exists": true,
+      "local_cache_file_count": 34,
+      "local_cache_bytes": 7579049,
+      "local_cache_files": [
+        {
+          "path": "data/reference/earth_climate/raw/esa_cci_land_cover/planetary_computer_preview_2020/esa_cci_lc_2020_preview_mosaic.npz",
+          "bytes": 3058168,
+          "sha256": "f9d47fcd6c9f32ec65a2cba7ad04ad9e383f6501b41e1b255b6bd9b205fb581b"
+        },
+        {
+          "path": "data/reference/earth_climate/raw/esa_cci_land_cover/planetary_computer_preview_2020/esa_cci_lc_items_2020.json",
+          "bytes": 1678167,
+          "sha256": "92aaaf9e61eebf2417e3fb8ed0dae8ed9a2873c3b51e4bd1841cdbb479e4ed3f"
+        },
+        {
+          "path": "data/reference/earth_climate/raw/esa_cci_land_cover/planetary_computer_preview_2020/previews/C3S-LC-L4-LCCS-Map-300m-P1Y-2020-v2.1.1-N00E000.png",
+          "bytes": 207634,
+          "sha256": "afc19139776801e5f13dcb031a504ad2d51008c9404cae14f66eafe260a3a239"
+        },
+        {
+          "path": "data/reference/earth_climate/raw/esa_cci_land_cover/planetary_computer_preview_2020/previews/C3S-LC-L4-LCCS-Map-300m-P1Y-2020-v2.1.1-N00E045.png",
+          "bytes": 182462,
+          "sha256": "6f5fc221b6b90fc9e4607635e821df18d879dc1515ccb44dd05c4b85952d8539"
+        },
+        {
+          "path": "data/reference/earth_climate/raw/esa_cci_land_cover/planetary_computer_preview_2020/previews/C3S-LC-L4-LCCS-Map-300m-P1Y-2020-v2.1.1-N00E090.png",
+          "bytes": 225877,
+          "sha256": "4c8a2e03277e91d2380308b8a8dbb8a31257360b113ba6a5718991810b94b133"
+        },
+        {
+          "path": "data/reference/earth_climate/raw/esa_cci_land_cover/planetary_computer_preview_2020/previews/C3S-LC-L4-LCCS-Map-300m-P1Y-2020-v2.1.1-N00E135.png",
+          "bytes": 18241,
+          "sha256": "1705c7a7ebf3c3368cf96fd2edbd29015498b22cf4802913da48f21db64296f1"
+        },
+        {
+          "path": "data/reference/earth_climate/raw/esa_cci_land_cover/planetary_computer_preview_2020/previews/C3S-LC-L4-LCCS-Map-300m-P1Y-2020-v2.1.1-N00W045.png",
+          "bytes": 74976,
+          "sha256": "3e3678e95aabd07d4c236adadcac35bc956e6f21558c6d6c621fd624405922ac"
+        },
+        {
+          "path": "data/reference/earth_climate/raw/esa_cci_land_cover/planetary_computer_preview_2020/previews/C3S-LC-L4-LCCS-Map-300m-P1Y-2020-v2.1.1-N00W090.png",
+          "bytes": 113823,
+          "sha256": "bd2f4611767d42c0f1fa72f279ec3cacb4cab64ae4a15d62cad290ca17655727"
+        },
+        {
+          "path": "data/reference/earth_climate/raw/esa_cci_land_cover/planetary_computer_preview_2020/previews/C3S-LC-L4-LCCS-Map-300m-P1Y-2020-v2.1.1-N00W135.png",
+          "bytes": 117321,
+          "sha256": "62aa04f11ba22603d3a8e782d815db75eafb78b2489fd996d404adcac1689010"
+        },
+        {
+          "path": "data/reference/earth_climate/raw/esa_cci_land_cover/planetary_computer_preview_2020/previews/C3S-LC-L4-LCCS-Map-300m-P1Y-2020-v2.1.1-N00W180.png",
+          "bytes": 7668,
+          "sha256": "ad6252eb261db68408c143d8f55fa48fc465a76cdd71e13331e0f83da402c727"
+        },
+        {
+          "path": "data/reference/earth_climate/raw/esa_cci_land_cover/planetary_computer_preview_2020/previews/C3S-LC-L4-LCCS-Map-300m-P1Y-2020-v2.1.1-N45E000.png",
+          "bytes": 181395,
+          "sha256": "ca83c99aa5282cfd34b670835c007ded2fb56247f16151982481702d9fc522f9"
+        },
+        {
+          "path": "data/reference/earth_climate/raw/esa_cci_land_cover/planetary_computer_preview_2020/previews/C3S-LC-L4-LCCS-Map-300m-P1Y-2020-v2.1.1-N45E045.png",
+          "bytes": 206700,
+          "sha256": "44b0d8e07defc3dd0f4b399d32370cd80a15fd9af192b0fe25d8d090227e6602"
+        },
+        {
+          "path": "data/reference/earth_climate/raw/esa_cci_land_cover/planetary_computer_preview_2020/previews/C3S-LC-L4-LCCS-Map-300m-P1Y-2020-v2.1.1-N45E090.png",
+          "bytes": 165825,
+          "sha256": "7de13ba04c416327983c6510cf771410a3b72b9196706c3b31fd84027ef02f0a"
+        },
+        {
+          "path": "data/reference/earth_climate/raw/esa_cci_land_cover/planetary_computer_preview_2020/previews/C3S-LC-L4-LCCS-Map-300m-P1Y-2020-v2.1.1-N45E135.png",
+          "bytes": 124907,
+          "sha256": "afbc54928c8ff50f39f9bb60a8171c263ae3707f8d116fedd44a187390adf28e"
+        },
+        {
+          "path": "data/reference/earth_climate/raw/esa_cci_land_cover/planetary_computer_preview_2020/previews/C3S-LC-L4-LCCS-Map-300m-P1Y-2020-v2.1.1-N45W045.png",
+          "bytes": 45538,
+          "sha256": "27124baab7acf6497c9229d64064c9ac11ce50c89e5982c04e670f301ce750f4"
+        },
+        {
+          "path": "data/reference/earth_climate/raw/esa_cci_land_cover/planetary_computer_preview_2020/previews/C3S-LC-L4-LCCS-Map-300m-P1Y-2020-v2.1.1-N45W090.png",
+          "bytes": 137670,
+          "sha256": "45320e0f27394442010b416bef0feaa676268b051cef0220f5892e7c1b794a49"
+        },
+        {
+          "path": "data/reference/earth_climate/raw/esa_cci_land_cover/planetary_computer_preview_2020/previews/C3S-LC-L4-LCCS-Map-300m-P1Y-2020-v2.1.1-N45W135.png",
+          "bytes": 190211,
+          "sha256": "661dccf2a4555c1e9a5ed79b88bbb3fb17bada5588de9f552d8052231e21926d"
+        },
+        {
+          "path": "data/reference/earth_climate/raw/esa_cci_land_cover/planetary_computer_preview_2020/previews/C3S-LC-L4-LCCS-Map-300m-P1Y-2020-v2.1.1-N45W180.png",
+          "bytes": 91331,
+          "sha256": "25d492e5d22bef4b0fad9e761d2d980f80aefd67e7e20b21d29295be0089b73d"
+        },
+        {
+          "path": "data/reference/earth_climate/raw/esa_cci_land_cover/planetary_computer_preview_2020/previews/C3S-LC-L4-LCCS-Map-300m-P1Y-2020-v2.1.1-S45E000.png",
+          "bytes": 173240,
+          "sha256": "6171f90328580e3958ebd906839b0d7316100b2afd5ceb1131f8395ce6c808ed"
+        },
+        {
+          "path": "data/reference/earth_climate/raw/esa_cci_land_cover/planetary_computer_preview_2020/previews/C3S-LC-L4-LCCS-Map-300m-P1Y-2020-v2.1.1-S45E045.png",
+          "bytes": 17834,
+          "sha256": "14171cff5d390aa4b7c215b214d1c7dca05243786e1a775fee1537f6abb6863d"
+        },
+        {
+          "path": "data/reference/earth_climate/raw/esa_cci_land_cover/planetary_computer_preview_2020/previews/C3S-LC-L4-LCCS-Map-300m-P1Y-2020-v2.1.1-S45E090.png",
+          "bytes": 84492,
+          "sha256": "dea4e6dffa95165417ab68c7e2986e17aecb36c01ac9ae7da9f2c037a1adbfd1"
+        },
+        {
+          "path": "data/reference/earth_climate/raw/esa_cci_land_cover/planetary_computer_preview_2020/previews/C3S-LC-L4-LCCS-Map-300m-P1Y-2020-v2.1.1-S45E135.png",
+          "bytes": 106958,
+          "sha256": "d19b93dc803b15e432a7a527f896f2d32838fae5800cba2f7694a148a8c7ac21"
+        },
+        {
+          "path": "data/reference/earth_climate/raw/esa_cci_land_cover/planetary_computer_preview_2020/previews/C3S-LC-L4-LCCS-Map-300m-P1Y-2020-v2.1.1-S45W045.png",
+          "bytes": 51824,
+          "sha256": "2fa648da5d14fb5e6221909ff65d0cdb7f2999abf2905450da7d2bae11ab64ba"
+        },
+        {
+          "path": "data/reference/earth_climate/raw/esa_cci_land_cover/planetary_computer_preview_2020/previews/C3S-LC-L4-LCCS-Map-300m-P1Y-2020-v2.1.1-S45W090.png",
+          "bytes": 203999,
+          "sha256": "adad2f4a9ac804b10b62852d18cbbc10a004f6c19653bf15cae69dc9478322f1"
+        },
+        {
+          "path": "data/reference/earth_climate/raw/esa_cci_land_cover/planetary_computer_preview_2020/previews/C3S-LC-L4-LCCS-Map-300m-P1Y-2020-v2.1.1-S45W135.png",
+          "bytes": 7126,
+          "sha256": "7740f9d45040180429393e692edd1fcc532019440f9e74da156afed1dd031c69"
+        },
+        {
+          "path": "data/reference/earth_climate/raw/esa_cci_land_cover/planetary_computer_preview_2020/previews/C3S-LC-L4-LCCS-Map-300m-P1Y-2020-v2.1.1-S45W180.png",
+          "bytes": 7582,
+          "sha256": "1d6c12cbe46e8995fcfc3bbceb513f854d90433e844ec35f79bbc675e54423c2"
+        },
+        {
+          "path": "data/reference/earth_climate/raw/esa_cci_land_cover/planetary_computer_preview_2020/previews/C3S-LC-L4-LCCS-Map-300m-P1Y-2020-v2.1.1-S90E000.png",
+          "bytes": 7998,
+          "sha256": "d2996339085519774e52087baa68783d36573cfe8776f22e5e16e227154c9154"
+        },
+        {
+          "path": "data/reference/earth_climate/raw/esa_cci_land_cover/planetary_computer_preview_2020/previews/C3S-LC-L4-LCCS-Map-300m-P1Y-2020-v2.1.1-S90E045.png",
+          "bytes": 9096,
+          "sha256": "48171823e91bdce9bb8d0b7373c38dd65b113bab1078d9c1e05efba4ffa9417d"
+        },
+        {
+          "path": "data/reference/earth_climate/raw/esa_cci_land_cover/planetary_computer_preview_2020/previews/C3S-LC-L4-LCCS-Map-300m-P1Y-2020-v2.1.1-S90E090.png",
+          "bytes": 7753,
+          "sha256": "ddfe2e4553d56f087bd2889d6b9fb674ee628ee69c1453b87f7cf67aad738c4e"
+        },
+        {
+          "path": "data/reference/earth_climate/raw/esa_cci_land_cover/planetary_computer_preview_2020/previews/C3S-LC-L4-LCCS-Map-300m-P1Y-2020-v2.1.1-S90E135.png",
+          "bytes": 11325,
+          "sha256": "826a49382995a6347c793c074ada4bddb06556c7d3c21e181546f2d5fe758c18"
+        },
+        {
+          "path": "data/reference/earth_climate/raw/esa_cci_land_cover/planetary_computer_preview_2020/previews/C3S-LC-L4-LCCS-Map-300m-P1Y-2020-v2.1.1-S90W045.png",
+          "bytes": 9072,
+          "sha256": "beb89926dad27edca82405a55aad5504277367785c1a39ddfff81513cfcbc117"
+        },
+        {
+          "path": "data/reference/earth_climate/raw/esa_cci_land_cover/planetary_computer_preview_2020/previews/C3S-LC-L4-LCCS-Map-300m-P1Y-2020-v2.1.1-S90W090.png",
+          "bytes": 35559,
+          "sha256": "e422aa59d895eea0ea56d989d30a65f0a49acc5117a988028cc77368d36bc9f1"
+        }
+      ],
+      "checksum_sha256": null,
+      "checksum_status": "partial_file_checksums_computed",
+      "acquisition_status": "available_local_cache"
+    },
+    {
+      "source_id": "MODIS_MCD12C1",
+      "category": "biome_land_cover",
+      "title": "MODIS MCD12C1 global land-cover type",
+      "source_url": "https://modis.gsfc.nasa.gov/data/dataprod/mod12.php",
+      "variables": [
+        "land_cover_class"
+      ],
+      "temporal_baseline": "satellite-era annual land cover",
+      "native_resolution": "0.05 degree global product",
+      "local_cache_path": "data/reference/earth_climate/raw/modis_mcd12c1/",
+      "requires_account": false,
+      "priority": "secondary_land_cover_reference",
+      "parser_status": "planned",
+      "derived_targets": [
+        "earth.biome_class"
+      ],
+      "notes": "Alternative or cross-check for biome envelope calibration.",
+      "local_cache_abs_path": "/Users/rayw/Projects/aevum/data/reference/earth_climate/raw/modis_mcd12c1",
+      "local_cache_exists": false,
+      "local_cache_bytes": 0,
+      "checksum_sha256": null,
+      "checksum_status": "pending_until_acquisition",
+      "acquisition_status": "not_downloaded"
+    },
+    {
+      "source_id": "RESOLVE_ECOREGIONS_2017",
+      "category": "biome_ecoregion",
+      "title": "RESOLVE Ecoregions 2017",
+      "source_url": "https://ecoregions.appspot.com/",
+      "download_urls": [
+        "https://storage.googleapis.com/teow2016/Ecoregions2017.zip"
+      ],
+      "variables": [
+        "biome_id",
+        "ecoregion_id"
+      ],
+      "temporal_baseline": "modern terrestrial ecoregions",
+      "native_resolution": "global polygon dataset",
+      "local_cache_path": "data/reference/earth_climate/raw/ecoregions_2017/",
+      "requires_account": false,
+      "priority": "secondary_biome_reference",
+      "parser_status": "implemented",
+      "derived_targets": [
+        "earth.resolve_biome_class",
+        "earth.resolve_ecoregion_id"
+      ],
+      "notes": "Terrestrial 14-biome and 846-ecoregion reference.  This is a calibration target, not a direct climate-driver field.",
+      "local_cache_abs_path": "/Users/rayw/Projects/aevum/data/reference/earth_climate/raw/ecoregions_2017",
+      "local_cache_exists": true,
+      "local_cache_file_count": 1,
+      "local_cache_bytes": 149248653,
+      "local_cache_files": [
+        {
+          "path": "data/reference/earth_climate/raw/ecoregions_2017/Ecoregions2017.zip",
+          "bytes": 149248653,
+          "sha256": "be36d6209e443038d02e309f0447c6e7f2a62f5fe60c605ffe90d064952f2a60"
+        }
+      ],
+      "checksum_sha256": null,
+      "checksum_status": "file_checksums_computed",
+      "acquisition_status": "available_local_cache"
+    }
+  ]
+}

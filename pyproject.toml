@@ -1,0 +1,31 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "aevum"
+version = "0.1.0"
+description = "Planetary deep-time evolution engine + world history archive + strategy map compiler"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [{ name = "aevum" }]
+dependencies = [
+    "numpy>=1.24",
+    "scipy>=1.10",
+    "matplotlib>=3.7",
+    "pyyaml>=6.0",
+    "h5py>=3.10",
+    "pyshp>=2.3",
+    "lerc>=4.0",
+]
+
+[project.scripts]
+aevum = "aevum.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["aevum*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

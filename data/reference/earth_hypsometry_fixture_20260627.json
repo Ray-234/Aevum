@@ -1,0 +1,53 @@
+{
+  "schema": "aevum.real_earth_hypsometry_fixture.v1",
+  "fixture_version": "2026-06-27.p77",
+  "status": "derived_metric_fixture",
+  "source_ids": [
+    "NOAA_ETOPO_2022",
+    "GEBCO_GRIDDED_BATHYMETRY"
+  ],
+  "source_urls": [
+    "https://www.ncei.noaa.gov/products/etopo-global-relief-model",
+    "https://www.gebco.net/data-products/gridded-bathymetry-data"
+  ],
+  "raw_data_stored_in_repo": false,
+  "raw_data_policy": "Raw ETOPO/GEBCO rasters are not committed. This fixture stores only small derived metric targets and broad hypsometric bins for offline benchmark validation.",
+  "extraction_note": "Stage A seed fixture assembled from documented Earth hypsometry and bathymetry targets. Later direct raster extraction must replace or regenerate this JSON while keeping the same schema.",
+  "area_weighting": "global_area_fraction",
+  "vertical_datum": "meters_relative_to_modern_mean_sea_level",
+  "bins": [
+    {"label": "hadal_and_deep_trench", "min_m": -11000.0, "max_m": -6000.0, "area_fraction": 0.010},
+    {"label": "deep_abyss", "min_m": -6000.0, "max_m": -4500.0, "area_fraction": 0.210},
+    {"label": "abyssal_plain", "min_m": -4500.0, "max_m": -3500.0, "area_fraction": 0.230},
+    {"label": "lower_slope_rise", "min_m": -3500.0, "max_m": -2500.0, "area_fraction": 0.135},
+    {"label": "upper_slope_rise", "min_m": -2500.0, "max_m": -1000.0, "area_fraction": 0.083},
+    {"label": "continental_shelf_and_shallow_seas", "min_m": -1000.0, "max_m": 0.0, "area_fraction": 0.040},
+    {"label": "lowland", "min_m": 0.0, "max_m": 500.0, "area_fraction": 0.132},
+    {"label": "low_upland", "min_m": 500.0, "max_m": 1000.0, "area_fraction": 0.065},
+    {"label": "upland", "min_m": 1000.0, "max_m": 2000.0, "area_fraction": 0.060},
+    {"label": "highland", "min_m": 2000.0, "max_m": 3000.0, "area_fraction": 0.022},
+    {"label": "very_high_plateau_or_mountain", "min_m": 3000.0, "max_m": 5000.0, "area_fraction": 0.010},
+    {"label": "extreme_mountain", "min_m": 5000.0, "max_m": 9000.0, "area_fraction": 0.003}
+  ],
+  "derived_metrics": {
+    "land_fraction": 0.292,
+    "ocean_fraction": 0.708,
+    "land_elevation_mean_m": 835.0,
+    "land_elevation_p50_m": 620.0,
+    "land_elevation_p95_m": 2600.0,
+    "high_land_fraction_gt2500m": 0.055,
+    "lowland_fraction_lt500m": 0.452,
+    "lowland_fraction_lt1000m": 0.675,
+    "ocean_depth_mean_m": 3688.0,
+    "shelf_fraction_of_ocean": 0.056,
+    "slope_rise_fraction_of_ocean": 0.117,
+    "abyss_fraction_of_ocean": 0.636,
+    "trench_and_hadal_fraction_of_ocean": 0.014,
+    "shelf_to_abyss_depth_delta_m": 3900.0
+  },
+  "quality_flags": {
+    "direct_raster_extraction": false,
+    "small_derived_fixture": true,
+    "requires_future_regeneration_from_raw_raster": true
+  }
+}

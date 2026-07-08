@@ -1,0 +1,944 @@
+features:
+- feature_id: stellar.luminosity
+  representation: global_scalar
+  domain: global
+  unit: W
+  producer: stellar
+  dependencies: []
+  time_support: instantaneous
+  fidelity_levels:
+  - analytic
+  - tracks
+  conservation_constraints: []
+  uncertainty: none
+  valid_range:
+  - 1.0e+23
+  - 1.0e+28
+  validation: 'faint-young-sun: L(t) monotonic for main sequence'
+  description: Bolometric stellar luminosity at time t.
+  status: implemented
+- feature_id: stellar.surface_flux
+  representation: scalar_field
+  domain: surface_cells
+  unit: W m^-2
+  producer: stellar
+  dependencies:
+  - stellar.luminosity
+  time_support: annual_mean
+  fidelity_levels:
+  - analytic
+  conservation_constraints:
+  - energy
+  uncertainty: none
+  valid_range:
+  - 0.0
+  - 4000.0
+  validation: global mean ~= L/(16 pi d^2)
+  description: Top-of-atmosphere insolation, latitude & obliquity weighted.
+  status: implemented
+- feature_id: orbit.obliquity
+  representation: global_scalar
+  domain: global
+  unit: deg
+  producer: stellar
+  dependencies: []
+  time_support: snapshot
+  fidelity_levels:
+  - fixed
+  - perturbed
+  conservation_constraints: []
+  uncertainty: none
+  valid_range:
+  - 0.0
+  - 90.0
+  validation: ''
+  description: ''
+  status: implemented
+- feature_id: orbit.eccentricity
+  representation: global_scalar
+  domain: global
+  unit: '1'
+  producer: stellar
+  dependencies: []
+  time_support: snapshot
+  fidelity_levels:
+  - fixed
+  - perturbed
+  conservation_constraints: []
+  uncertainty: none
+  valid_range:
+  - 0.0
+  - 0.8
+  validation: ''
+  description: ''
+  status: implemented
+- feature_id: interior.mantle_temperature
+  representation: global_scalar
+  domain: global
+  unit: K
+  producer: interior
+  dependencies: []
+  time_support: snapshot
+  fidelity_levels:
+  - box
+  - proxy_3d
+  conservation_constraints:
+  - energy
+  uncertainty: none
+  valid_range:
+  - 1200.0
+  - 4000.0
+  validation: monotone cooling under net heat loss
+  description: Bulk mantle potential temperature.
+  status: implemented
+- feature_id: interior.radiogenic_heat
+  representation: global_scalar
+  domain: global
+  unit: W
+  producer: interior
+  dependencies: []
+  time_support: snapshot
+  fidelity_levels:
+  - analytic
+  conservation_constraints: []
+  uncertainty: none
+  valid_range:
+  - 0.0
+  - 100000000000000.0
+  validation: ''
+  description: Decaying radiogenic heat production.
+  status: implemented
+- feature_id: interior.tectonic_vigor
+  representation: global_scalar
+  domain: global
+  unit: '1'
+  producer: interior
+  dependencies:
+  - interior.mantle_temperature
+  time_support: snapshot
+  fidelity_levels:
+  - parametric
+  conservation_constraints: []
+  uncertainty: none
+  valid_range:
+  - 0.0
+  - 5.0
+  validation: ''
+  description: Dimensionless convective vigour driving plate speeds.
+  status: implemented
+- feature_id: interior.degassing_co2
+  representation: global_scalar
+  domain: global
+  unit: mol Myr^-1
+  producer: interior
+  dependencies:
+  - interior.tectonic_vigor
+  time_support: snapshot
+  fidelity_levels:
+  - parametric
+  conservation_constraints: []
+  uncertainty: none
+  valid_range:
+  - 0.0
+  - 1.0e+20
+  validation: ''
+  description: Volcanic/metamorphic CO2 outgassing rate.
+  status: implemented
+- feature_id: tectonics.plate_id
+  representation: scalar_field
+  domain: surface_cells
+  unit: '1'
+  producer: tectonics
+  dependencies: []
+  time_support: snapshot
+  fidelity_levels:
+  - voronoi_euler
+  - stress_topology
+  conservation_constraints: []
+  uncertainty: none
+  valid_range: null
+  validation: plates tile the sphere with no gaps/overlaps
+  description: Integer plate label per cell.
+  status: implemented
+- feature_id: tectonics.plate_velocity
+  representation: vector_field
+  domain: surface_cells
+  unit: m s^-1
+  producer: tectonics
+  dependencies:
+  - tectonics.plate_id
+  - interior.tectonic_vigor
+  time_support: snapshot
+  fidelity_levels:
+  - euler_poles
+  conservation_constraints: []
+  uncertainty: none
+  valid_range: null
+  validation: ''
+  description: ''
+  status: implemented
+- feature_id: crust.type
+  representation: scalar_field
+  domain: surface_cells
+  unit: '1'
+  producer: tectonics
+  dependencies: []
+  time_support: snapshot
+  fidelity_levels:
+  - binary
+  - lithology
+  conservation_constraints: []
+  uncertainty: none
+  valid_range: null
+  validation: ''
+  description: 0 = oceanic, 1 = continental.
+  status: implemented
+- feature_id: crust.thickness_m
+  representation: scalar_field
+  domain: surface_cells
+  unit: m
+  producer: tectonics
+  dependencies:
+  - crust.type
+  time_support: snapshot
+  fidelity_levels:
+  - rule_based
+  - flexural
+  conservation_constraints:
+  - crust_area
+  uncertainty: none
+  valid_range:
+  - 0.0
+  - 80000.0
+  validation: continental 25-70 km, oceanic 5-10 km
+  description: ''
+  status: implemented
+- feature_id: crust.age_myr
+  representation: scalar_field
+  domain: surface_cells
+  unit: Myr
+  producer: tectonics
+  dependencies:
+  - tectonics.plate_id
+  time_support: snapshot
+  fidelity_levels:
+  - advected
+  conservation_constraints: []
+  uncertainty: none
+  valid_range:
+  - 0.0
+  - 4500.0
+  validation: ''
+  description: Time since crust formed at a ridge.
+  status: implemented
+- feature_id: tectonics.boundaries
+  representation: network
+  domain: surface_cells
+  unit: '1'
+  producer: tectonics
+  dependencies:
+  - tectonics.plate_id
+  - tectonics.plate_velocity
+  time_support: snapshot
+  fidelity_levels:
+  - classified
+  conservation_constraints: []
+  uncertainty: none
+  valid_range: null
+  validation: ''
+  description: Plate boundary network classified divergent/convergent/transform.
+  status: implemented
+- feature_id: tectonics.plates
+  representation: object_set
+  domain: global
+  unit: '1'
+  producer: tectonics
+  dependencies: []
+  time_support: snapshot
+  fidelity_levels:
+  - euler
+  conservation_constraints: []
+  uncertainty: none
+  valid_range: null
+  validation: ''
+  description: Plate objects with Euler pole, rate, area, type.
+  status: implemented
+- feature_id: tectonics.orogens
+  representation: object_set
+  domain: surface_cells
+  unit: '1'
+  producer: tectonics
+  dependencies:
+  - tectonics.boundaries
+  time_support: snapshot
+  fidelity_levels:
+  - rule_based
+  conservation_constraints: []
+  uncertainty: none
+  valid_range: null
+  validation: ''
+  description: Mountain belts from collision/subduction, with formation age.
+  status: implemented
+- feature_id: tectonics.volcanoes
+  representation: object_set
+  domain: surface_cells
+  unit: '1'
+  producer: tectonics
+  dependencies: []
+  time_support: snapshot
+  fidelity_levels:
+  - rule_based
+  conservation_constraints: []
+  uncertainty: none
+  valid_range: null
+  validation: ''
+  description: ''
+  status: implemented
+- feature_id: tectonics.regime
+  representation: global_scalar
+  domain: global
+  unit: '1'
+  producer: tectonics
+  dependencies:
+  - interior.tectonic_vigor
+  time_support: snapshot
+  fidelity_levels:
+  - state_machine
+  conservation_constraints: []
+  uncertainty: none
+  valid_range: null
+  validation: ''
+  description: Active tectonic mode (mobile/sluggish/episodic/stagnant).
+  status: implemented
+- feature_id: impacts.flux
+  representation: global_scalar
+  domain: global
+  unit: Myr^-1
+  producer: impacts
+  dependencies: []
+  time_support: snapshot
+  fidelity_levels:
+  - scaling_law
+  conservation_constraints: []
+  uncertainty: none
+  valid_range: null
+  validation: ''
+  description: Expected impactor count per Myr (time-decaying bombardment).
+  status: implemented
+- feature_id: impacts.crater_field
+  representation: scalar_field
+  domain: surface_cells
+  unit: '1'
+  producer: impacts
+  dependencies:
+  - impacts.flux
+  time_support: snapshot
+  fidelity_levels:
+  - scaling_law
+  conservation_constraints: []
+  uncertainty: none
+  valid_range: null
+  validation: ''
+  description: ''
+  status: implemented
+- feature_id: terrain.bedrock_m
+  representation: scalar_field
+  domain: surface_cells
+  unit: m
+  producer: terrain
+  dependencies:
+  - crust.thickness_m
+  - crust.type
+  time_support: snapshot
+  fidelity_levels:
+  - isostasy
+  conservation_constraints:
+  - mass
+  uncertainty: none
+  valid_range:
+  - -12000.0
+  - 12000.0
+  validation: ''
+  description: Isostatic bedrock surface before sediment.
+  status: implemented
+- feature_id: terrain.elevation_m
+  representation: scalar_field
+  domain: surface_cells
+  unit: m
+  producer: terrain
+  dependencies:
+  - terrain.bedrock_m
+  - sediment.thickness_m
+  time_support: snapshot
+  fidelity_levels:
+  - isostasy_erosion
+  conservation_constraints: []
+  uncertainty: none
+  valid_range:
+  - -12000.0
+  - 12000.0
+  validation: hypsometry bimodal for mobile-lid worlds
+  description: Solid surface elevation relative to geoid.
+  status: implemented
+- feature_id: sediment.thickness_m
+  representation: scalar_field
+  domain: surface_cells
+  unit: m
+  producer: terrain
+  dependencies:
+  - terrain.bedrock_m
+  - hydrology.flow_accumulation
+  time_support: snapshot
+  fidelity_levels:
+  - diffusion_streampower
+  conservation_constraints:
+  - mass
+  uncertainty: none
+  valid_range:
+  - 0.0
+  - 20000.0
+  validation: ''
+  description: ''
+  status: implemented
+- feature_id: terrain.lithology
+  representation: scalar_field
+  domain: surface_cells
+  unit: '1'
+  producer: terrain
+  dependencies:
+  - crust.type
+  - tectonics.volcanoes
+  time_support: snapshot
+  fidelity_levels:
+  - categorical
+  conservation_constraints: []
+  uncertainty: none
+  valid_range: null
+  validation: ''
+  description: Igneous/sedimentary/metamorphic class (host rock for resources).
+  status: implemented
+- feature_id: hydrology.flow_accumulation
+  representation: scalar_field
+  domain: surface_cells
+  unit: m^2
+  producer: terrain
+  dependencies:
+  - terrain.elevation_m
+  - climate.runoff
+  time_support: snapshot
+  fidelity_levels:
+  - d8_priority_flood
+  conservation_constraints:
+  - water
+  uncertainty: none
+  valid_range: null
+  validation: ''
+  description: ''
+  status: implemented
+- feature_id: hydrology.rivers
+  representation: network
+  domain: surface_cells
+  unit: '1'
+  producer: terrain
+  dependencies:
+  - hydrology.flow_accumulation
+  time_support: snapshot
+  fidelity_levels:
+  - steepest_descent
+  conservation_constraints: []
+  uncertainty: none
+  valid_range: null
+  validation: no cyclic flow; all flow reaches ocean or endorheic sink
+  description: ''
+  status: implemented
+- feature_id: ocean.sea_level_m
+  representation: global_scalar
+  domain: global
+  unit: m
+  producer: terrain
+  dependencies:
+  - terrain.bedrock_m
+  time_support: snapshot
+  fidelity_levels:
+  - volume_balance
+  conservation_constraints:
+  - water
+  uncertainty: none
+  valid_range: null
+  validation: ''
+  description: Global sea level from ocean water volume vs hypsometry.
+  status: implemented
+- feature_id: terrain.basins
+  representation: object_set
+  domain: surface_cells
+  unit: '1'
+  producer: terrain
+  dependencies:
+  - terrain.elevation_m
+  time_support: snapshot
+  fidelity_levels:
+  - rule_based
+  conservation_constraints: []
+  uncertainty: none
+  valid_range: null
+  validation: ''
+  description: ''
+  status: implemented
+- feature_id: climate.surface_temperature
+  representation: scalar_field
+  domain: surface_cells
+  unit: K
+  producer: climate
+  dependencies:
+  - stellar.surface_flux
+  - atmosphere.co2
+  - terrain.elevation_m
+  - ocean.mask
+  - cryosphere.sea_ice
+  time_support: monthly_climatology
+  fidelity_levels:
+  - ebm
+  - reduced
+  - gcm
+  conservation_constraints:
+  - energy
+  uncertainty: ensemble
+  valid_range:
+  - 120.0
+  - 360.0
+  validation: global energy budget closes; no land-crossing currents
+  description: ''
+  status: implemented
+- feature_id: climate.precipitation
+  representation: scalar_field
+  domain: surface_cells
+  unit: mm yr^-1
+  producer: climate
+  dependencies:
+  - climate.surface_temperature
+  - atmosphere.wind
+  - terrain.elevation_m
+  - ocean.mask
+  time_support: monthly_climatology
+  fidelity_levels:
+  - moisture_advection
+  conservation_constraints:
+  - water
+  uncertainty: none
+  valid_range:
+  - 0.0
+  - 12000.0
+  validation: orographic windward wet / leeward rain-shadow dry
+  description: ''
+  status: implemented
+- feature_id: climate.evaporation
+  representation: scalar_field
+  domain: surface_cells
+  unit: mm yr^-1
+  producer: climate
+  dependencies:
+  - climate.surface_temperature
+  - ocean.mask
+  time_support: snapshot
+  fidelity_levels:
+  - bulk
+  conservation_constraints:
+  - water
+  uncertainty: none
+  valid_range: null
+  validation: ''
+  description: ''
+  status: implemented
+- feature_id: climate.runoff
+  representation: scalar_field
+  domain: surface_cells
+  unit: mm yr^-1
+  producer: climate
+  dependencies:
+  - climate.precipitation
+  - climate.evaporation
+  time_support: snapshot
+  fidelity_levels:
+  - balance
+  conservation_constraints:
+  - water
+  uncertainty: none
+  valid_range: null
+  validation: ''
+  description: ''
+  status: implemented
+- feature_id: atmosphere.wind
+  representation: vector_field
+  domain: surface_cells
+  unit: m s^-1
+  producer: climate
+  dependencies:
+  - climate.surface_temperature
+  - orbit.obliquity
+  time_support: snapshot
+  fidelity_levels:
+  - banded
+  - gcm
+  conservation_constraints: []
+  uncertainty: none
+  valid_range: null
+  validation: ''
+  description: Idealised Hadley/Ferrel/Polar banded winds (+ tidal-lock cell).
+  status: implemented
+- feature_id: atmosphere.co2
+  representation: global_scalar
+  domain: global
+  unit: bar
+  producer: biogeochem
+  dependencies: []
+  time_support: snapshot
+  fidelity_levels:
+  - box
+  conservation_constraints: []
+  uncertainty: none
+  valid_range:
+  - 0.0
+  - 10.0
+  validation: ''
+  description: ''
+  status: implemented
+- feature_id: atmosphere.pressure
+  representation: global_scalar
+  domain: global
+  unit: bar
+  producer: climate
+  dependencies: []
+  time_support: snapshot
+  fidelity_levels:
+  - stub
+  conservation_constraints: []
+  uncertainty: none
+  valid_range:
+  - 0.0
+  - 100.0
+  validation: ''
+  description: ''
+  status: implemented
+- feature_id: ocean.mask
+  representation: scalar_field
+  domain: surface_cells
+  unit: '1'
+  producer: terrain
+  dependencies:
+  - terrain.elevation_m
+  - ocean.sea_level_m
+  time_support: snapshot
+  fidelity_levels:
+  - threshold
+  conservation_constraints: []
+  uncertainty: none
+  valid_range: null
+  validation: ''
+  description: ''
+  status: implemented
+- feature_id: ocean.currents
+  representation: vector_field
+  domain: ocean_cells
+  unit: m s^-1
+  producer: climate
+  dependencies:
+  - atmosphere.wind
+  - climate.surface_temperature
+  time_support: snapshot
+  fidelity_levels:
+  - wind_driven
+  - thermohaline
+  conservation_constraints: []
+  uncertainty: none
+  valid_range: null
+  validation: streamlines never cross land
+  description: ''
+  status: implemented
+- feature_id: ocean.salinity
+  representation: scalar_field
+  domain: ocean_cells
+  unit: g kg^-1
+  producer: climate
+  dependencies:
+  - climate.evaporation
+  - climate.runoff
+  time_support: snapshot
+  fidelity_levels:
+  - box
+  conservation_constraints:
+  - salt
+  uncertainty: none
+  valid_range: null
+  validation: ''
+  description: ''
+  status: reserved
+- feature_id: cryosphere.sea_ice
+  representation: scalar_field
+  domain: ocean_cells
+  unit: '1'
+  producer: climate
+  dependencies:
+  - climate.surface_temperature
+  time_support: snapshot
+  fidelity_levels:
+  - threshold
+  conservation_constraints: []
+  uncertainty: none
+  valid_range:
+  - 0.0
+  - 1.0
+  validation: ''
+  description: ''
+  status: implemented
+- feature_id: cryosphere.ice_sheet
+  representation: scalar_field
+  domain: surface_cells
+  unit: m
+  producer: climate
+  dependencies:
+  - climate.surface_temperature
+  - climate.precipitation
+  time_support: snapshot
+  fidelity_levels:
+  - threshold
+  - flow
+  conservation_constraints:
+  - water
+  uncertainty: none
+  valid_range:
+  - 0.0
+  - 5000.0
+  validation: ''
+  description: ''
+  status: implemented
+- feature_id: biogeochem.carbon
+  representation: global_scalar
+  domain: global
+  unit: mol
+  producer: biogeochem
+  dependencies:
+  - interior.degassing_co2
+  - climate.surface_temperature
+  - biosphere.npp
+  time_support: snapshot
+  fidelity_levels:
+  - copse_box
+  - cgenie
+  conservation_constraints:
+  - carbon
+  uncertainty: none
+  valid_range: null
+  validation: carbon inventory conserved across reservoirs
+  description: ''
+  status: implemented
+- feature_id: biogeochem.oxygen
+  representation: global_scalar
+  domain: global
+  unit: mol
+  producer: biogeochem
+  dependencies:
+  - biosphere.npp
+  - biogeochem.carbon
+  time_support: snapshot
+  fidelity_levels:
+  - box
+  conservation_constraints:
+  - oxygen
+  uncertainty: none
+  valid_range: null
+  validation: ''
+  description: Atmospheric O2 from organic carbon burial vs oxidative sinks.
+  status: implemented
+- feature_id: biogeochem.phosphorus
+  representation: global_scalar
+  domain: global
+  unit: mol
+  producer: biogeochem
+  dependencies: []
+  time_support: snapshot
+  fidelity_levels:
+  - box
+  conservation_constraints:
+  - phosphorus
+  uncertainty: none
+  valid_range: null
+  validation: ''
+  description: ''
+  status: reserved
+- feature_id: biogeochem.ocean_redox
+  representation: scalar_field
+  domain: ocean_cells
+  unit: '1'
+  producer: biogeochem
+  dependencies:
+  - biogeochem.oxygen
+  - biosphere.npp
+  time_support: snapshot
+  fidelity_levels:
+  - box
+  conservation_constraints: []
+  uncertainty: none
+  valid_range: null
+  validation: ''
+  description: Oxic/anoxic/euxinic state (drives black shales, anoxic events).
+  status: reserved
+- feature_id: biogeochem.weathering_flux
+  representation: global_scalar
+  domain: global
+  unit: mol Myr^-1
+  producer: biogeochem
+  dependencies:
+  - climate.surface_temperature
+  - climate.runoff
+  - terrain.elevation_m
+  time_support: snapshot
+  fidelity_levels:
+  - parametric
+  conservation_constraints:
+  - carbon
+  uncertainty: none
+  valid_range: null
+  validation: ''
+  description: Carbonate-silicate weathering CO2 drawdown.
+  status: implemented
+- feature_id: biosphere.functional_groups
+  representation: object_set
+  domain: global
+  unit: '1'
+  producer: biosphere
+  dependencies: []
+  time_support: snapshot
+  fidelity_levels:
+  - niche
+  conservation_constraints: []
+  uncertainty: none
+  valid_range: null
+  validation: ''
+  description: Functional groups described by traits, not species lists.
+  status: implemented
+- feature_id: biosphere.lineages
+  representation: object_set
+  domain: global
+  unit: '1'
+  producer: biosphere
+  dependencies:
+  - biosphere.functional_groups
+  time_support: snapshot
+  fidelity_levels:
+  - tree
+  conservation_constraints: []
+  uncertainty: none
+  valid_range: null
+  validation: ''
+  description: Phylogeny with innovation & extinction history.
+  status: implemented
+- feature_id: biosphere.biome
+  representation: scalar_field
+  domain: surface_cells
+  unit: '1'
+  producer: biosphere
+  dependencies:
+  - climate.surface_temperature
+  - climate.precipitation
+  - biosphere.npp
+  time_support: snapshot
+  fidelity_levels:
+  - classified
+  conservation_constraints: []
+  uncertainty: none
+  valid_range: null
+  validation: ''
+  description: ''
+  status: implemented
+- feature_id: biosphere.npp
+  representation: scalar_field
+  domain: surface_cells
+  unit: kg m^-2 yr^-1
+  producer: biosphere
+  dependencies:
+  - climate.surface_temperature
+  - climate.precipitation
+  - stellar.surface_flux
+  - biogeochem.oxygen
+  time_support: snapshot
+  fidelity_levels:
+  - empirical
+  conservation_constraints:
+  - carbon
+  uncertainty: none
+  valid_range:
+  - 0.0
+  - 5.0
+  validation: ''
+  description: Net primary productivity.
+  status: implemented
+- feature_id: biosphere.distribution
+  representation: scalar_field
+  domain: surface_cells
+  unit: '1'
+  producer: biosphere
+  dependencies:
+  - biosphere.functional_groups
+  - biosphere.biome
+  time_support: snapshot
+  fidelity_levels:
+  - niche_dispersal
+  conservation_constraints: []
+  uncertainty: none
+  valid_range: null
+  validation: ''
+  description: Group occupancy constrained by niche AND dispersal/isolation.
+  status: implemented
+- feature_id: resources.deposits
+  representation: object_set
+  domain: surface_cells
+  unit: '1'
+  producer: resources
+  dependencies:
+  - tectonics.volcanoes
+  - terrain.lithology
+  - biogeochem.ocean_redox
+  - sediment.thickness_m
+  time_support: snapshot
+  fidelity_levels:
+  - genesis_rules
+  - probabilistic
+  conservation_constraints: []
+  uncertainty: none
+  valid_range: null
+  validation: every deposit has genesis model, age, host, grade, preservation
+  description: Ore/energy deposits as objects with full genesis-preservation history.
+  status: implemented
+- feature_id: archive.strata
+  representation: object_set
+  domain: surface_cells
+  unit: '1'
+  producer: terrain
+  dependencies:
+  - sediment.thickness_m
+  time_support: snapshot
+  fidelity_levels:
+  - layer_cake
+  conservation_constraints: []
+  uncertainty: none
+  valid_range: null
+  validation: ''
+  description: ''
+  status: reserved
+- feature_id: archive.fossil_potential
+  representation: scalar_field
+  domain: surface_cells
+  unit: '1'
+  producer: biosphere
+  dependencies:
+  - biosphere.npp
+  - sediment.thickness_m
+  time_support: snapshot
+  fidelity_levels:
+  - empirical
+  conservation_constraints: []
+  uncertainty: none
+  valid_range: null
+  validation: ''
+  description: ''
+  status: reserved
