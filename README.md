@@ -4,6 +4,8 @@
 
 # aevum — 行星深时演化引擎 + 世界历史档案 + 策略地图编译器
 
+[English README](README_EN.md) · [文档索引](docs/INDEX.md) · [结果展示](docs/RESULT_SHOWCASE.md)
+
 `aevum`（拉丁语“纪元/世”）不是一个“地图生成器”，而是一个能回答
 **“这里为什么会变成这样”** 的因果系统。它从行星形成一路演化到“现代”，
 保存完整的形成历史，并把真值世界**编译**成一张《文明》式的六边格策略地图。
@@ -31,6 +33,15 @@ Köppen 与 biome。
 不提交本地完整 `out*` 实验目录。
 
 ![72000-cell elevation snapshot](docs/assets/showcase/elevation_72000_seed707.png)
+
+### 最新地形演化视频
+
+<video src="docs/assets/showcase/elevation_evolution_earthlike_seed42.mp4" controls width="100%" poster="docs/assets/showcase/elevation_72000_seed707.png"></video>
+
+如果当前 Markdown 渲染器不内嵌播放视频，可以直接打开
+[`elevation_evolution_earthlike_seed42.mp4`](docs/assets/showcase/elevation_evolution_earthlike_seed42.mp4)。
+该视频来自 `out_elevation_evolution_videos_6worlds_20260706/earthlike_seed42/`，
+展示类地世界从深时构造演化到终端地形图的高程变化。
 
 | 构造/地貌诊断 | 洋底与造山语义 |
 |---|---|

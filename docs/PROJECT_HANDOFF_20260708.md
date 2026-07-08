@@ -46,7 +46,7 @@ They are excluded by `.gitignore`, especially:
 - `/data/reference/earth_climate/cache/` and
   `/data/reference/earth_climate/processed/`: derived climate-reference cache.
 - `*.npz`, `*.png`, `*.mp4`, and similar generated binary artifacts outside
-  explicitly allowed documentation images.
+  explicitly allowed documentation assets.
 
 Do not commit these to normal GitHub history.  Several raw files exceed
 GitHub's 100 MB object limit.  If the cluster needs persistent large artifacts,

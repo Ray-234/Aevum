@@ -22,6 +22,7 @@ dist/
 *.png
 !docs/**/*.png
 *.mp4
+!docs/**/*.mp4
 *.mov
 *.avi
 *.gif

@@ -25,6 +25,20 @@ terrain direction after the plate/terrain closure work: broad continental
 domains, visible shelves and abyssal structure, coherent highland belts, and
 more varied continental interiors than the early generator.
 
+## Terrain Evolution Video
+
+Source:
+`out_elevation_evolution_videos_6worlds_20260706/earthlike_seed42/earthlike_seed42.mp4`
+
+<video src="assets/showcase/elevation_evolution_earthlike_seed42.mp4" controls width="100%" poster="assets/showcase/elevation_72000_seed707.png"></video>
+
+Direct link:
+[elevation_evolution_earthlike_seed42.mp4](assets/showcase/elevation_evolution_earthlike_seed42.mp4)
+
+This short video shows the Earth-like seed-42 terrain/elevation evolution
+through deep time.  It is tracked as a curated README asset; the full batch of
+six generated videos remains outside Git history.
+
 ## Terrain Diagnostic Contact Sheet
 
 Source:
