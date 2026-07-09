@@ -6121,12 +6121,19 @@ class ClimateModule(Module):
         heat_effect = self._spread_ocean_influence_to_coasts(
             grid, heat_ocean, ocean, passes=3, alpha=0.42, land_damping=0.86)
         heat_effect -= float(np.average(heat_effect, weights=grid.cell_area))
+        # Boundary currents should leave a visible same-latitude warm/cold
+        # coastal imprint on adjacent land.  The ocean anomaly itself remains
+        # controlled by the gyre/upwelling solve; this only strengthens the
+        # exported coastal land expression after cross-shore spreading.
+        heat_effect[~ocean] *= 1.50
         heat_effect = np.clip(heat_effect, -6.0, 6.0)
         # NOAA/AOML drifter calibration: the reduced gyre machinery above uses
         # a dynamically useful transport proxy, but the exported near-surface
-        # current vectors should stay in observed drifter-speed ranges.
+        # current vectors should stay in observed drifter-speed ranges.  Keep
+        # the diagnostic wind-stress response slightly stronger so the ocean
+        # coupling layer remains visible without raising final current speeds.
         surface_currents = 0.64 * currents
-        wind_stress_current_response = 0.64 * direct_wind_response
+        wind_stress_current_response = 0.80 * direct_wind_response
         boundary_current_type = np.zeros(grid.n, dtype=np.float64)
         boundary_current_type[warm_strength > 0.08] = 1.0
         boundary_current_type[cold_strength > 0.08] = -1.0
@@ -7719,6 +7726,9 @@ class ClimateModule(Module):
             coupling["ocean_heat_flux"])
         seasonal_wind = hydro_feedback["seasonal_wind"]
         pressure_proxy = hydro_feedback["pressure_proxy"]
+        if world.spec.orbit.tidally_locked:
+            locked_wind = self._tidally_locked_wind(world)
+            seasonal_wind = np.repeat(locked_wind[None, :, :], 4, axis=0)
         wind = seasonal_wind.mean(axis=0)
         moisture_flow = self._seasonal_moisture_flow_networks(
             grid, hydro, ~ocean, ocean, seasonal_wind, geography_fields,

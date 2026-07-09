@@ -154,16 +154,28 @@ DYLD_FALLBACK_LIBRARY_PATH=/opt/homebrew/opt/expat/lib \
 ./.venv/bin/python -m pytest -q
 ```
 
-- That run was interrupted after 23:20 because the full suite was taking
-  cluster-scale time.  Partial result at interruption: `141 passed, 3 failed`.
-  The three observed failures were:
+- Follow-up fix, 2026-07-09: the three observed failures above were repaired.
+  The repair also fixed a later `tests/test_engine.py` seam-audit false
+  positive where polar longitude-wrap edges were counted as antimeridian
+  dateline seams.
+- Verification after the fix:
   `tests/test_engine.py::test_parented_hotspot_chain_can_form_limited_archipelago`,
   `tests/test_engine.py::test_tidally_locked_world_does_not_get_earthlike_seasons`,
   and
-  `tests/test_engine.py::test_ocean_currents_are_basin_constrained_and_transport_heat`.
-- Treat the repository as transferred with known pre-existing engine/climate
-  test debt.  The cluster should rerun the full suite and then decide whether
-  to repair these tests before new climate-engine experiments.
+  `tests/test_engine.py::test_ocean_currents_are_basin_constrained_and_transport_heat`
+  passed together (`3 passed in 54.04s`).
+- Related regression subset passed:
+  `tests/test_core.py`, `tests/test_p173_ocean_lifecycle_gate.py`,
+  `tests/test_earth_climate_ocean_spatial_gate.py`, and
+  `tests/test_earth_climate_coupled_consistency_gate.py`
+  (`22 passed in 1.03s`).
+- Seam regression checks passed:
+  `tests/test_engine.py::test_tectonic_diagnostics_cover_current_world_and_archive`
+  and `tests/test_engine.py::test_truth_layers_are_cyclic_at_dateline`
+  (`2 passed in 123.63s`).
+- A full test-suite pass has still not been completed locally because the
+  suite is long-running on this workstation.  The cluster should rerun the full
+  suite before large parameter sweeps.
 
 Generate a quick world:
 

@@ -2321,7 +2321,17 @@ def _seam_continuity_metrics(world) -> dict[str, Any]:
     n = grid.n
     lon = grid.lon
     edges = grid.edges
-    seam_edges = edges[np.abs(lon[edges[:, 0]] - lon[edges[:, 1]]) > 180.0]
+    raw_wrap_edges = edges[np.abs(lon[edges[:, 0]] - lon[edges[:, 1]]) > 180.0]
+    if raw_wrap_edges.size:
+        wi, wj = raw_wrap_edges[:, 0], raw_wrap_edges[:, 1]
+        dateline_like = (
+            (np.abs(lon[wi]) >= 120.0)
+            & (np.abs(lon[wj]) >= 120.0)
+            & (np.maximum(np.abs(grid.lat[wi]), np.abs(grid.lat[wj])) <= 82.0)
+        )
+        seam_edges = raw_wrap_edges[dateline_like]
+    else:
+        seam_edges = raw_wrap_edges
     rel = world.get_field("terrain.elevation_m", 0.0) - world.sea_level
     land = rel >= 0.0
     ocean = ~land
@@ -2334,6 +2344,7 @@ def _seam_continuity_metrics(world) -> dict[str, Any]:
 
     detail: dict[str, Any] = {
         "seam_edge_count": int(seam_edges.shape[0]),
+        "raw_longitude_wrap_edge_count": int(raw_wrap_edges.shape[0]),
         "seam_land_ocean_mismatch_fraction": 0.0,
         "seam_plate_boundary_fraction": 0.0,
         "seam_exposed_land_component_mismatch_fraction": 0.0,

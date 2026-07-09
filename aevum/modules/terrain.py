@@ -50647,6 +50647,67 @@ class TerrainModule(Module):
                     support |= self._dilate_mask(grid, mask, passes=1) & ocean
         return support & ocean
 
+    def _tectonic_parented_ocean_support_mask(
+        self,
+        world,
+        ocean: np.ndarray,
+    ) -> np.ndarray:
+        """Ocean cells backed by explicit tectonic parents before landform objects exist."""
+        grid = world.grid
+        n = int(grid.n)
+        ocean = np.asarray(ocean, dtype=bool)
+        if ocean.shape != (n,):
+            ocean = np.zeros(n, dtype=bool)
+        support = np.zeros(n, dtype=bool)
+
+        for collection in ("tectonics.plumes", "tectonics.volcanoes", "tectonics.lips"):
+            for obj in world.objects.get(collection, []):
+                if not isinstance(obj, dict):
+                    continue
+                cells = self._cell_mask(grid, obj.get("cells", []))
+                cell = obj.get("cell")
+                if cell is not None:
+                    try:
+                        idx = int(cell)
+                    except (TypeError, ValueError):
+                        idx = -1
+                    if 0 <= idx < n:
+                        cells[idx] = True
+                support |= cells
+
+        domain = np.asarray(world.get_field("crust.domain", DOMAIN_OCEANIC),
+                            dtype=np.float64)
+        origin = np.asarray(world.get_field("crust.origin", 0.0),
+                            dtype=np.float64)
+        crust_type = np.asarray(world.get_field("crust.type", 0.0),
+                                dtype=np.float64)
+        terrane_id = np.asarray(
+            world.get_field("tectonics.terrane_id", -1.0), dtype=np.float64)
+        if domain.shape != (n,):
+            domain = np.full(n, DOMAIN_OCEANIC, dtype=np.float64)
+        if origin.shape != (n,):
+            origin = np.zeros(n, dtype=np.float64)
+        if crust_type.shape != (n,):
+            crust_type = np.zeros(n, dtype=np.float64)
+        if terrane_id.shape != (n,):
+            terrane_id = np.full(n, -1.0, dtype=np.float64)
+
+        support |= (
+            (domain == DOMAIN_LIP)
+            | (origin == ORIGIN_PLUME_IMPACT)
+            | (
+                (crust_type >= 0.5)
+                & (
+                    (terrane_id >= 0.0)
+                    | (domain == DOMAIN_ACCRETED_TERRANE)
+                    | (origin == ORIGIN_ARC)
+                )
+            )
+        )
+        if support.any():
+            support = self._dilate_mask(grid, support & ocean, passes=1) & ocean
+        return support & ocean
+
     def _p173_deepen_unsupported_ocean_shoals(
         self,
         world,
@@ -51049,6 +51110,11 @@ class TerrainModule(Module):
         out = self._apply_coherent_ocean_floor_fabric(
             world, out, sea_level, ocean, coast_pass,
             ridge_zone, trench_zone, transform_zone)
+        parented_ocean_support = self._tectonic_parented_ocean_support_mask(
+            world, ocean)
+        parented_process_islands = (
+            ocean & parented_ocean_support & (out >= float(sea_level))
+        )
 
         transform_far = transform_zone & ((coast_pass < 0) | (coast_pass >= 3)) & ~trench_zone
         if transform_far.any():
@@ -51074,18 +51140,35 @@ class TerrainModule(Module):
             sea_level,
             ocean,
             coast_pass,
-            preserve=trench_zone | transform_zone | ridge_zone | protected_seaway,
+            preserve=(
+                trench_zone
+                | transform_zone
+                | ridge_zone
+                | protected_seaway
+                | parented_ocean_support
+            ),
+        )
+        parented_process_islands |= (
+            ocean & parented_ocean_support & (out >= float(sea_level))
         )
         out = self._suppress_patchy_open_ocean_depth_spots(
             grid, out, sea_level, ocean, coast_pass,
-            preserve=trench_zone | transform_zone)
+            preserve=trench_zone | transform_zone | parented_ocean_support)
 
         smoothed = self._smooth_field(grid, out, passes=1, alpha=0.18)
-        smooth_ocean = ocean & ~protected_seaway
+        smooth_ocean = ocean & ~protected_seaway & ~parented_process_islands
         out[smooth_ocean] = 0.82 * out[smooth_ocean] + 0.18 * smoothed[smooth_ocean]
         out = self._suppress_patchy_open_ocean_depth_spots(
             grid, out, sea_level, ocean, coast_pass,
-            preserve=trench_zone | transform_zone | ridge_zone)
+            preserve=(
+                trench_zone
+                | transform_zone
+                | ridge_zone
+                | parented_ocean_support
+            ))
+        if parented_process_islands.any():
+            out[parented_process_islands] = np.maximum(
+                out[parented_process_islands], float(sea_level) + 35.0)
         if protected_seaway.any():
             out[protected_seaway] = np.minimum(out[protected_seaway], sea_level - 260.0)
         out[land] = surface[land]
